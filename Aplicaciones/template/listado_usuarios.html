@@ -1,0 +1,131 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block title %}Listado de Usuarios{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+<style>
+    /* Ajustar los botones de DataTables dentro de la card */
+    .dt-buttons .btn {
+        margin-right: 5px;
+        margin-bottom: 5px;
+        font-size: 0.85rem;
+    }
+    table.dataTable thead th {
+        background-color: #f3f4f6;
+        font-weight: 600;
+    }
+    table.dataTable tbody tr:nth-child(even) { background-color: #f8fafc; }
+    table.dataTable tbody tr:hover { background-color: #e0f2fe; }
+</style>
+{% endblock %}
+
+{% block page_title %}Lista de Usuarios{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'index' %}">Inicio</a></li>
+<li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+{% endblock %}
+
+{% block contenido %}
+<div class="card shadow">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{% url 'nuevo_usuario' %}" class="btn btn-primary">
+                <i class="fa fa-user-plus me-2"></i>Nuevo Usuario
+            </a>
+            <a href="{% url 'index' %}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left me-2"></i>Volver al Inicio
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover" id="tbl_usuarios">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cédula</th>
+                        <th>Rol</th>
+                        <th>Sucursal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr class="text-center">
+                        <td>{{ usuario.id }}</td>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.apellido }}</td>
+                        <td>{{ usuario.cedula }}</td>
+                        <td><span class="badge bg-info">{{ usuario.rol }}</span></td>
+                        <td>
+                            {% if usuario.sucursal %}
+                                {{ usuario.sucursal.nombre }}
+                            {% else %}
+                                <span class="text-muted">No asignada</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">
+                            <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning btn-sm" title="Editar">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{% url 'eliminar_usuario' usuario.id %}" class="btn btn-danger btn-sm btn-eliminar" title="Eliminar">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No hay usuarios registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#tbl_usuarios').DataTable({
+        responsive: true,
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+        },
+        dom: "<'d-flex justify-content-between mb-2'Bf>rtip",
+        buttons: [
+            { extend: 'copyHtml5', text: 'Copiar', className: 'btn btn-secondary btn-sm' },
+            { extend: 'csvHtml5', text: 'CSV', className: 'btn btn-info btn-sm' },
+            { extend: 'excelHtml5', text: 'Excel', className: 'btn btn-success btn-sm' },
+            { extend: 'pdfHtml5', text: 'PDF', className: 'btn btn-danger btn-sm' },
+            { extend: 'print', text: 'Imprimir', className: 'btn btn-dark btn-sm' }
+        ],
+        pageLength: 25,
+        order: [[0, 'desc']]
+    });
+
+    // Confirmación de eliminación
+    $('.btn-eliminar').on('click', function(e){
+        if(!confirm('¿Está seguro de eliminar este usuario?')){
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}

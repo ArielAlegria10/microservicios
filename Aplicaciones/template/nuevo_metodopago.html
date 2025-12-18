@@ -1,0 +1,62 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block title %}Nuevo Método de Pago{% endblock %}
+
+{% block contenido %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <form action="{% url 'nuevo_metodopago' %}" method="post">
+                            {% csrf_token %}
+                            <h3 class="text-center mb-4 text-primary">
+                                <i class="fa fa-credit-card me-2"></i>Agregar Nuevo Método de Pago
+                            </h3>
+
+                            <!-- Campo: Descripción -->
+                            <div class="mb-3">
+                                <label for="txt_descripcion" class="form-label">
+                                    <b>Descripción:</b>
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="txt_descripcion"
+                                       id="txt_descripcion"
+                                       required
+                                       placeholder="Ej: Efectivo, Tarjeta, Transferencia">
+                            </div>
+
+                            <!-- Campo: Estado -->
+                            <div class="mb-3">
+                                <label for="select_estado" class="form-label">
+                                    <b>Estado:</b>
+                                </label>
+                                <select class="form-control" name="select_estado" id="select_estado" required>
+                                    <option value="Activo" selected>Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fa fa-save me-2"></i>Guardar
+                                </button>
+                                <a href="{% url 'listado_metodopago' %}" class="btn btn-danger btn-lg px-5">
+                                    <i class="fa fa-times me-2"></i>Cancelar
+                                </a>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

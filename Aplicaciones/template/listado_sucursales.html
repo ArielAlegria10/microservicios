@@ -1,0 +1,56 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+
+<div class="container mt-4">
+    <h3 class="text-primary">Lista de Sucursales</h3>
+
+    <a href="{% url 'nueva_sucursal' %}" class="btn btn-success mb-3">Agregar Nueva Sucursal</a>
+
+    <table class="table table-bordered table-striped table-hover" id="tbl_sucursales">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for sucursal in sucursales %}
+            <tr>
+                <td>{{ sucursal.id }}</td>
+                <td>{{ sucursal.nombre }}</td>
+                <td>{{ sucursal.direccion }}</td>
+                <td>
+                    <a href="{% url 'editar_sucursal' sucursal.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_sucursal' sucursal.id %}" 
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Está seguro de eliminar esta sucursal?');">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No hay sucursales registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#tbl_sucursales').DataTable({
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copyHtml5', text: 'Copiar', className: 'btn btn-secondary' },
+                { extend: 'csvHtml5', text: 'Exportar a CSV', className: 'btn btn-info' },
+                { extend: 'excelHtml5', text: 'Exportar a Excel', className: 'btn btn-success' },
+                { extend: 'pdfHtml5', text: 'Exportar a PDF', className: 'btn btn-danger' }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

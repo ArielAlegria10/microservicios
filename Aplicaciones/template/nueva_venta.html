@@ -1,0 +1,1239 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-md-12">
+        <div class="form-container shadow">
+
+            <form action="{% url 'nueva_venta' %}" id="frm_nueva_venta" method="post">
+                <h4 class="text-center mb-2 fw-bold">Registrar Nueva Venta</h4>
+                {% csrf_token %}
+
+                <!-- Campos del Cliente -->
+                <div class="row mb-2">
+                    <div class="col-md-5">
+                        <label for="txt_cedula" class="form-label fw-semibold">Cédula:</label>
+                        <input type="text" class="form-control form-control-sm" name="txt_cedula" id="txt_cedula" required>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="txt_nombre" class="form-label fw-semibold">Nombre:</label>
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" required>
+                    </div>
+                </div>
+
+                <!-- Tabla de Productos -->
+                <div class="table-responsive mb-2">
+                    <table class="table table-bordered align-middle table-sm" id="tabla_productos">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th style="display:none;">Cantidad</th>
+                                <th>Precio</th>
+                                <th>Comisión</th>
+                                <th>Plataforma</th>
+                                <th>Total</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_productos">
+                            <tr class="fila_base">
+                                <td>
+<select class="form-select form-select-sm select-producto" name="productos[0][nombre]" required>
+    <option value="">-- Seleccione un producto --</option>
+    <option value="AGUA - SANTA ISABEL EMAPASI">AGUA - SANTA ISABEL EMAPASI</option>
+    <option value="ANT - RENOVACION DE MATRICULA">ANT - RENOVACION DE MATRICULA</option>
+    <option value="Banco Del Pacífico - Retiros">Banco Del Pacífico - Retiros</option>
+    <option value="CITACIONES - INFRACCIONES">CITACIONES - INFRACCIONES</option>
+    <option value="copias 0,50">copias 0,50</option>
+    <option value="copias 1,00">copias 1,00</option>
+    <option value="MOVILIDAD COTOPAXI - RODAJE">MOVILIDAD COTOPAXI - RODAJE</option>
+    <option value="ORDEN DE PAGO">ORDEN DE PAGO</option>
+    <option value="OTROS PAGOS PUJILI">OTROS PAGOS PUJILI</option>
+    <option value="PRUEBA COTOPAXI IMP RODAJE">PRUEBA COTOPAXI IMP RODAJE</option>
+    <option value="SRI - MATRICULACION VEHICULAR">SRI - MATRICULACION VEHICULAR</option>
+    <option value="TASA REVISIÓN PUJILÍ">TASA REVISIÓN PUJILÍ</option>
+    <option value="TURNOS">TURNOS</option>
+    <option value="DEPOSITOS COOPERATIVA ATUNTAQUI">DEPOSITOS COOPERATIVA ATUNTAQUI</option>
+    <option value="MULTAS CNE - CONSEJO NACIONAL ELECTORAL">MULTAS CNE - CONSEJO NACIONAL ELECTORAL</option>
+    <option value="MUNICIPIO DE GUAYAQUIL - PREDIOS">MUNICIPIO DE GUAYAQUIL - PREDIOS</option>
+    <option value="** MUNICIPIO DE ANTONIO ANTE - PREDIO URBANO">** MUNICIPIO DE ANTONIO ANTE - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE LATACUNGA - PREDIO URBANO">** MUNICIPIO DE LATACUNGA - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE MACHALA - PREDIO URBANO">** MUNICIPIO DE MACHALA - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE MONTECRISTI - PREDIO URBANO">** MUNICIPIO DE MONTECRISTI - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE MONTUFAR - PREDIO URBANO">** MUNICIPIO DE MONTUFAR - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE PASAJE - PREDIO URBANO">** MUNICIPIO DE PASAJE - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE PELILEO - PREDIO URBANO">** MUNICIPIO DE PELILEO - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE PILLARO - PREDIO URBANO">** MUNICIPIO DE PILLARO - PREDIO URBANO</option>
+    <option value="** MUNICIPIO DE TULCAN - PREDIO URBANO">** MUNICIPIO DE TULCAN - PREDIO URBANO</option>
+    <option value="ACADEMIA CULINARIA DEL PACIFICO">ACADEMIA CULINARIA DEL PACIFICO</option>
+    <option value="AGROCALIDAD">AGROCALIDAD</option>
+    <option value="AGUA - CAYAMBE">AGUA - CAYAMBE</option>
+    <option value="AGUA - DEL CHUNO / CHONE">AGUA - DEL CHUNO / CHONE</option>
+    <option value="AGUA - JIPIJAPA">AGUA - JIPIJAPA</option>
+    <option value="AGUA - LATACUNGA">AGUA - LATACUNGA</option>
+    <option value="AGUA - MONTECRISTI">AGUA - MONTECRISTI</option>
+    <option value="AGUA - SANGAY">AGUA - SANGAY</option>
+    <option value="AGUA ARENILLAS">AGUA ARENILLAS</option>
+    <option value="AGUA COTACACHI">AGUA COTACACHI</option>
+    <option value="AGUA DE PELILEO">AGUA DE PELILEO</option>
+    <option value="AGUA HUAQUILLAS">AGUA HUAQUILLAS</option>
+    <option value="AGUA MANABI EMMAP-EP - VARIOS CANTONES">AGUA MANABI EMMAP-EP - VARIOS CANTONES</option>
+    <option value="AGUA RUMINAHUI">AGUA RUMINAHUI</option>
+    <option value="AGUAPEN">AGUAPEN</option>
+    <option value="Aguapen - Recaudacion Vtanilla Agua Potabl">Aguapen - Recaudacion Vtanilla Agua Potabl</option>
+    <option value="AGUAPEN - SANTA ELENA">AGUAPEN - SANTA ELENA</option>
+    <option value="AGUAS DE MACHALA">AGUAS DE MACHALA</option>
+    <option value="Aguasmachala - Recaudacion Vtanilla Agua Potabl">Aguasmachala - Recaudacion Vtanilla Agua Potabl</option>
+    <option value="AKIMOVIL RECARGAS">AKIMOVIL RECARGAS</option>
+    <option value="ALIANZA PAÍS">ALIANZA PAÍS</option>
+    <option value="AMAGUA - AGUA">AMAGUA - AGUA</option>
+    <option value="AMAGUA - FACTURAS DE VENTA">AMAGUA - FACTURAS DE VENTA</option>
+    <option value="Amagua - Recaudacion Con Informacion">Amagua - Recaudacion Con Informacion</option>
+    <option value="AMAGUA - SAMBORONDON PAGOS PARCIALES">AMAGUA - SAMBORONDON PAGOS PARCIALES</option>
+    <option value="AMAZON PRIME VIDEO">AMAZON PRIME VIDEO</option>
+    <option value="AMT ORDEN DE PAGO / MUNICIPIO DE QUITO">AMT ORDEN DE PAGO / MUNICIPIO DE QUITO</option>
+    <option value="ANAI Academia Naval Almirante Illingworth">ANAI Academia Naval Almirante Illingworth</option>
+    <option value="Ant - Citacion Por Placa">Ant - Citacion Por Placa</option>
+    <option value="Ant - Citaciones">Ant - Citaciones</option>
+    <option value="ANT - CITACIONES Y MULTAS">ANT - CITACIONES Y MULTAS</option>
+    <option value="ANT - CONVENIOS">ANT - CONVENIOS</option>
+    <option value="Ant - Recaudacion Transito">Ant - Recaudacion Transito</option>
+    <option value="ANT - SOLICITUDES / ORDEN DE PAGO">ANT - SOLICITUDES / ORDEN DE PAGO</option>
+    <option value="ANT - TRAMITES EN LINEA">ANT - TRAMITES EN LINEA</option>
+    <option value="ANT - TRAMITES SIN INFORMACION">ANT - TRAMITES SIN INFORMACION</option>
+    <option value="ANT SOLICITUDES ALTERNATIVA">ANT SOLICITUDES ALTERNATIVA</option>
+    <option value="ARCOTEL">ARCOTEL</option>
+    <option value="Arcotel - Recaudacion Con Informacion">Arcotel - Recaudacion Con Informacion</option>
+    <option value="ARCSA - AGEN. REGULACION VIGILANCIA SANITARIA">ARCSA - AGEN. REGULACION VIGILANCIA SANITARIA</option>
+    <option value="Arcsa - Orden De Cobro">Arcsa - Orden De Cobro</option>
+    <option value="ARTEFACTA">ARTEFACTA</option>
+    <option value="ASOPRUV - VERANDA">ASOPRUV - VERANDA</option>
+    <option value="ATM">ATM</option>
+    <option value="ATM - CITACIONES">ATM - CITACIONES</option>
+    <option value="Atm - Citaciones">Atm - Citaciones</option>
+    <option value="Atm - Renovacion">Atm - Renovacion</option>
+    <option value="ATM - RENOVACION MATRICULA / RTV">ATM - RENOVACION MATRICULA / RTV</option>
+    <option value="ATM - SOLICITUD">ATM - SOLICITUD</option>
+    <option value="Atm - Solicitud">Atm - Solicitud</option>
+    <option value="Atm C Guayas - Por Identificacion">Atm C Guayas - Por Identificacion</option>
+    <option value="Atm C Guayas - Por Placa">Atm C Guayas - Por Placa</option>
+    <option value="Atm C Guayas - Por Solicitud">Atm C Guayas - Por Solicitud</option>
+    <option value="Atm C Guayas - Tramites De Transito">Atm C Guayas - Tramites De Transito</option>
+    <option value="ATM CENTRO GUAYAS - SOLICITUD">ATM CENTRO GUAYAS - SOLICITUD</option>
+    <option value="ATM CENTRO GUAYAS CTE - CITACIONES / CONVENIO">ATM CENTRO GUAYAS CTE - CITACIONES / CONVENIO</option>
+    <option value="ATM CTE - CONSORCIO COBRANZA CENTRO GUAYAS">ATM CTE - CONSORCIO COBRANZA CENTRO GUAYAS</option>
+    <option value="AZZORTI">AZZORTI</option>
+    <option value="Banco Del Pacífico - Avance De Efectivo Pacificard">Banco Del Pacífico - Avance De Efectivo Pacificard</option>
+    <option value="Banco Del Pacífico - Consulta De Saldos De Cuenta">Banco Del Pacífico - Consulta De Saldos De Cuenta</option>
+    <option value="Banco Del Pacífico - Creditos Estudiantiles Bpe Iece">Banco Del Pacífico - Creditos Estudiantiles Bpe Iece</option>
+    <option value="Banco Del Pacífico - Depósitos">Banco Del Pacífico - Depósitos</option>
+    <option value="Banco Del Pacífico - Retiro Sin Tarjeta">Banco Del Pacífico - Retiro Sin Tarjeta</option>
+    <option value="Banco Del Pacífico - Tarjeta De CrÉDito Pacificard">Banco Del Pacífico - Tarjeta De CrÉDito Pacificard</option>
+    <option value="BANCO PROCREDIT">BANCO PROCREDIT</option>
+    <option value="BANCO SOLIDARIO - CREDITO">BANCO SOLIDARIO - CREDITO</option>
+    <option value="BARCELONA">BARCELONA</option>
+    <option value="BCO AMAZONAS">BCO AMAZONAS</option>
+    <option value="BELCORP: L'BEL - éSIKA - CYZONE">BELCORP: L'BEL - éSIKA - CYZONE</option>
+    <option value="Bnfl - Recaudacion Con Informacion">Bnfl - Recaudacion Con Informacion</option>
+    <option value="BOMBEROS DURAN">BOMBEROS DURAN</option>
+    <option value="BPE ESTUDIOS (IECE)">BPE ESTUDIOS (IECE)</option>
+    <option value="Broadnet - Venta Tiempo Aire Celular">Broadnet - Venta Tiempo Aire Celular</option>
+    <option value="CABLE FAMILIA - TV / INTERNET">CABLE FAMILIA - TV / INTERNET</option>
+    <option value="CABLESPEED TV / INTERNET">CABLESPEED TV / INTERNET</option>
+    <option value="Cae - Senae On Line">Cae - Senae On Line</option>
+    <option value="CASA PLAN MOTOR PLAN">CASA PLAN MOTOR PLAN</option>
+    <option value="CENEST HARVARD">CENEST HARVARD</option>
+    <option value="CENTROSUR CISNERGIA">CENTROSUR CISNERGIA</option>
+    <option value="CERTERO">CERTERO</option>
+    <option value="CFN">CFN</option>
+    <option value="CHEVYPLAN">CHEVYPLAN</option>
+    <option value="Cisnergia - Rec Luz Electrica Online">Cisnergia - Rec Luz Electrica Online</option>
+    <option value="CLARO - SERVICIOS FIJOS TV, TELEFONO, INTERNET">CLARO - SERVICIOS FIJOS TV, TELEFONO, INTERNET</option>
+    <option value="CLARO RECARGAS">CLARO RECARGAS</option>
+    <option value="CLARO RECARGAS ILIMITADAS">CLARO RECARGAS ILIMITADAS</option>
+    <option value="CLARO TV SATELITAL">CLARO TV SATELITAL</option>
+    <option value="CNEL">CNEL</option>
+    <option value="CNEL GUAYAQUIL CISNERGIA">CNEL GUAYAQUIL CISNERGIA</option>
+    <option value="CNEL PAGOS PARCIALES">CNEL PAGOS PARCIALES</option>
+    <option value="Cnt - Recaudacion Internet">Cnt - Recaudacion Internet</option>
+    <option value="Cnt - Recaudacion Planes Celular">Cnt - Recaudacion Planes Celular</option>
+    <option value="Cnt - Recaudacion Telefonia Fija">Cnt - Recaudacion Telefonia Fija</option>
+    <option value="Cnt - Recaudacion Tv Pagada">Cnt - Recaudacion Tv Pagada</option>
+    <option value="Cnt - Venta Tiempo Aire Celular">Cnt - Venta Tiempo Aire Celular</option>
+    <option value="CNT EN LINEA">CNT EN LINEA</option>
+    <option value="CNT PAGOS PARCIALES">CNT PAGOS PARCIALES</option>
+    <option value="CNT RECARGAS">CNT RECARGAS</option>
+    <option value="CNT RECARGAS PAQUETES PREPAGO PLUS">CNT RECARGAS PAQUETES PREPAGO PLUS</option>
+    <option value="CNT RECARGAS TV PREPAGO - DTH">CNT RECARGAS TV PREPAGO - DTH</option>
+    <option value="COBRA FACIL RECOVER">COBRA FACIL RECOVER</option>
+    <option value="Cobranz Esme - Citacion Por Identificacion">Cobranz Esme - Citacion Por Identificacion</option>
+    <option value="Cobranz Esme - Citacion Por Placa">Cobranz Esme - Citacion Por Placa</option>
+    <option value="Cobranz Loja - Citacion Por Identificacion">Cobranz Loja - Citacion Por Identificacion</option>
+    <option value="Cobranz Loja - Citacion Por Placa">Cobranz Loja - Citacion Por Placa</option>
+    <option value="Cobranz Movi - Por Identificacion">Cobranz Movi - Por Identificacion</option>
+    <option value="Cobranz Movi - Por Placa">Cobranz Movi - Por Placa</option>
+    <option value="Cobranz Movi - Por Solicitud">Cobranz Movi - Por Solicitud</option>
+    <option value="Cobranz Sd - Citacion Por Identificacion">Cobranz Sd - Citacion Por Identificacion</option>
+    <option value="Cobranz Sd - Citacion Por Placa">Cobranz Sd - Citacion Por Placa</option>
+    <option value="COBRANZAS AMIBANK">COBRANZAS AMIBANK</option>
+    <option value="COMPRAS FREE FIRE - GARENA">COMPRAS FREE FIRE - GARENA</option>
+    <option value="Conecell - Recarga Tiempo Aire $1">Conecell - Recarga Tiempo Aire $1</option>
+    <option value="Conecell - Recarga Tiempo Aire $3">Conecell - Recarga Tiempo Aire $3</option>
+    <option value="Conecell - Recarga Tiempo Aire $5">Conecell - Recarga Tiempo Aire $5</option>
+    <option value="Conecell - Recarga Tiempo Aire Mayor O Igual A $6">Conecell - Recarga Tiempo Aire Mayor O Igual A $6</option>
+    <option value="Conecell - Recaudacion Planes Celular">Conecell - Recaudacion Planes Celular</option>
+    <option value="Conecell - Venta Tiempo Aire Celular">Conecell - Venta Tiempo Aire Celular</option>
+    <option value="CONSORCIO COBRANZA ESMERALDAS">CONSORCIO COBRANZA ESMERALDAS</option>
+    <option value="CONSORCIO COBRANZA JAMA">CONSORCIO COBRANZA JAMA</option>
+    <option value="CONSORCIO COBRANZA SAN VICENTE">CONSORCIO COBRANZA SAN VICENTE</option>
+    <option value="CONSORCIO MOBILITY - SANTO DOMINGO">CONSORCIO MOBILITY - SANTO DOMINGO</option>
+    <option value="CONSORCIO MOBILITY DURAN - CITACIONES / CONVENIO">CONSORCIO MOBILITY DURAN - CITACIONES / CONVENIO</option>
+    <option value="CONSORCIO MOBILITY DURAN - SOLICITUD">CONSORCIO MOBILITY DURAN - SOLICITUD</option>
+    <option value="Contraloria - Recaudacion Con Informacion">Contraloria - Recaudacion Con Informacion</option>
+    <option value="COOPERATIVA ANDALUCIA">COOPERATIVA ANDALUCIA</option>
+    <option value="COOPERATIVA COOPROGRESO">COOPERATIVA COOPROGRESO</option>
+    <option value="COORP FATIMA">COORP FATIMA</option>
+    <option value="Corp.Fatima - Orden De Cobro">Corp.Fatima - Orden De Cobro</option>
+    <option value="CRECOS CREDITOS ECONOMICOS">CRECOS CREDITOS ECONOMICOS</option>
+    <option value="CREDIMETRICA">CREDIMETRICA</option>
+    <option value="CREDITRUCK">CREDITRUCK</option>
+    <option value="CTG - CTE - CITACIONES / CONVENIO">CTG - CTE - CITACIONES / CONVENIO</option>
+    <option value="CTG - CTE - SOLICITUD">CTG - CTE - SOLICITUD</option>
+    <option value="Ctg - Por Identificacion">Ctg - Por Identificacion</option>
+    <option value="Ctg - Por Placa">Ctg - Por Placa</option>
+    <option value="Ctg - Por Solicitud">Ctg - Por Solicitud</option>
+    <option value="CTH S.A., PAGO DE CARTERA VENCIDA">CTH S.A., PAGO DE CARTERA VENCIDA</option>
+    <option value="CUOTA CREDITO BANCO CODESARROLLO">CUOTA CREDITO BANCO CODESARROLLO</option>
+    <option value="CUOTA CREDITO BANCO VISIONFUND">CUOTA CREDITO BANCO VISIONFUND</option>
+    <option value="CUOTA CREDITO COAC RIOBAMBA">CUOTA CREDITO COAC RIOBAMBA</option>
+    <option value="CVIALCO - PEAJE VIA A LA COSTA">CVIALCO - PEAJE VIA A LA COSTA</option>
+    <option value="DE PRATI">DE PRATI</option>
+    <option value="DEPOSITOS BANCO CODESARROLLO">DEPOSITOS BANCO CODESARROLLO</option>
+    <option value="DEPOSITOS BANCO DE LOJA">DEPOSITOS BANCO DE LOJA</option>
+    <option value="DEPOSITOS BANCO GENERAL RUMIÑAHUI">DEPOSITOS BANCO GENERAL RUMIÑAHUI</option>
+    <option value="DEPOSITOS BANCO PACIFICO">DEPOSITOS BANCO PACIFICO</option>
+    <option value="DEPOSITOS BANCO SOLIDARIO">DEPOSITOS BANCO SOLIDARIO</option>
+    <option value="DEPOSITOS BANCO VISIONFUND">DEPOSITOS BANCO VISIONFUND</option>
+    <option value="DEPOSITOS COAC RIOBAMBA">DEPOSITOS COAC RIOBAMBA</option>
+    <option value="DEPOSITOS COOPERATIVA COMERCIO">DEPOSITOS COOPERATIVA COMERCIO</option>
+    <option value="DEPOSITOS COOPERATIVA OSCUS">DEPOSITOS COOPERATIVA OSCUS</option>
+    <option value="DEPOSITOS COOPERATIVA PABLO MUÑOZ VEGA">DEPOSITOS COOPERATIVA PABLO MUÑOZ VEGA</option>
+    <option value="DEPOSITOS COOPERATIVA SAN FRANCISCO">DEPOSITOS COOPERATIVA SAN FRANCISCO</option>
+    <option value="DEPOSITOS COOPERATIVA TULCAN">DEPOSITOS COOPERATIVA TULCAN</option>
+    <option value="DEPOSITOS PRODUBANCO">DEPOSITOS PRODUBANCO</option>
+    <option value="Deprati - Orden De Cobro">Deprati - Orden De Cobro</option>
+    <option value="DESHABILITADO BANCO AMIBANK EX FINCA">DESHABILITADO BANCO AMIBANK EX FINCA</option>
+    <option value="DESHABILITADO COOPERATIVA ATUNTAQUI">DESHABILITADO COOPERATIVA ATUNTAQUI</option>
+    <option value="DESHABILITADO MUNICIPIO LOJA - AGUA">DESHABILITADO MUNICIPIO LOJA - AGUA</option>
+    <option value="DIARIO EXPRESO">DIARIO EXPRESO</option>
+    <option value="Dinadec - Cobro En Efectivo Cerveceria">Dinadec - Cobro En Efectivo Cerveceria</option>
+    <option value="DIRECTV RECARGAS">DIRECTV RECARGAS</option>
+    <option value="DISNEY +">DISNEY +</option>
+    <option value="DMT MANTA">DMT MANTA</option>
+    <option value="Dmt Manta - Tramites De Transito">Dmt Manta - Tramites De Transito</option>
+    <option value="DUIX">DUIX</option>
+    <option value="EASYTAXI">EASYTAXI</option>
+    <option value="ECUABET RECARGA">ECUABET RECARGA</option>
+    <option value="ECUASUEÑA">ECUASUEÑA</option>
+    <option value="EEASA - LUZ AMBATO">EEASA - LUZ AMBATO</option>
+    <option value="EEQ">EEQ</option>
+    <option value="EEQ - EMPRESA ELECTRICA QUITO">EEQ - EMPRESA ELECTRICA QUITO</option>
+    <option value="EERCS CUENCA">EERCS CUENCA</option>
+    <option value="EERSA - LUZ RIOBAMBA">EERSA - LUZ RIOBAMBA</option>
+    <option value="EERSSA - EMPRESA ELECTRICA LOJA">EERSSA - EMPRESA ELECTRICA LOJA</option>
+    <option value="ELECGALAPAGOS - LUZ GALAPAGOS">ELECGALAPAGOS - LUZ GALAPAGOS</option>
+    <option value="ELEPCO - LUZ COTOPAXI">ELEPCO - LUZ COTOPAXI</option>
+    <option value="EMAPA AMBATO - AGUA">EMAPA AMBATO - AGUA</option>
+    <option value="EMAPA DAULE - AGUA">EMAPA DAULE - AGUA</option>
+    <option value="EMAPA IBARRA - AGUA">EMAPA IBARRA - AGUA</option>
+    <option value="EMAPA MEJIA - AGUA">EMAPA MEJIA - AGUA</option>
+    <option value="EMAPA OTAVALO - AGUA">EMAPA OTAVALO - AGUA</option>
+    <option value="EMAPA RIOBAMBA - AGUA">EMAPA RIOBAMBA - AGUA</option>
+    <option value="Emapa09 - Recaudacion Agua Potable">Emapa09 - Recaudacion Agua Potable</option>
+    <option value="EMAPAD DURAN - AGUA">EMAPAD DURAN - AGUA</option>
+    <option value="EMAPAD DURAN - SERVICIO">EMAPAD DURAN - SERVICIO</option>
+    <option value="Emapad Ep - Recaudacion Vtanilla Agua Potabl">Emapad Ep - Recaudacion Vtanilla Agua Potabl</option>
+    <option value="EMELEC">EMELEC</option>
+    <option value="Emelec Socio - Recaudacion Con Informacion">Emelec Socio - Recaudacion Con Informacion</option>
+    <option value="EMELNORTE - LUZ">EMELNORTE - LUZ</option>
+    <option value="EMELNORTE - LUZ - PAGOS PARCIALES">EMELNORTE - LUZ - PAGOS PARCIALES</option>
+    <option value="EMELNORTE - LUZ IBARRA">EMELNORTE - LUZ IBARRA</option>
+    <option value="EMOV">EMOV</option>
+    <option value="EMOV CUENCA">EMOV CUENCA</option>
+    <option value="Emov Ep - Por Identificacion">Emov Ep - Por Identificacion</option>
+    <option value="Emov Ep - Por Placa">Emov Ep - Por Placa</option>
+    <option value="EMSABA BABAHOYO - AGUA">EMSABA BABAHYO - AGUA</option>
+    <option value="EPA EP">EPA EP</option>
+    <option value="Epa Ep - Recaudacion Con Informacion">Epa Ep - Recaudacion Con Informacion</option>
+    <option value="EPAM - AGUA DE MANTA">EPAM - AGUA DE MANTA</option>
+    <option value="Epam - Recaudacion Vtanilla Agua Potabl">Epam - Recaudacion Vtanilla Agua Potabl</option>
+    <option value="EPAM CUPON - AGUA DE MANTA">EPAM CUPON - AGUA DE MANTA</option>
+    <option value="EPAMIL MILAGRO - AGUA">EPAMIL MILAGRO - AGUA</option>
+    <option value="EPMAPA SANTO DOMINGO - AGUA">EPMAPA SANTO DOMINGO - AGUA</option>
+    <option value="Epmapa Sd - Recaudacion Vtanilla Agua Potabl">Epmapa Sd - Recaudacion Vtanilla Agua Potabl</option>
+    <option value="EPMAPAP PORTOVIEJO - AGUA">EPMAPAP PORTOVIEJO - AGUA</option>
+    <option value="EPMAPAQ - AGUA QUEVEDO">EPMAPAQ - AGUA QUEVEDO</option>
+    <option value="Epmaps - Recaudacion Vtanilla Agua Potabl">Epmaps - Recaudacion Vtanilla Agua Potabl</option>
+    <option value="EPMAPS QUITO - AGUA">EPMAPS QUITO - AGUA</option>
+    <option value="EPMAPSE - AGUA ESMERALDAS">EPMAPSE - AGUA ESMERALDAS</option>
+    <option value="EQUIFAX">EQUIFAX</option>
+    <option value="ESIKA">ESIKA</option>
+    <option value="Esmena - Recaudacion Centros Educativos">Esmena - Recaudacion Centros Educativos</option>
+    <option value="ESPOCH">ESPOCH</option>
+    <option value="Espoch - Recaudacion Con Informacion">Espoch - Recaudacion Con Informacion</option>
+    <option value="ESPOL">ESPOL</option>
+    <option value="ESVIAL TRANSITO ESMERALDAS - CITACIONES / CONVENIO">ESVIAL TRANSITO ESMERALDAS - CITACIONES / CONVENIO</option>
+    <option value="ESVIAL TRANSITO ESMERALDAS - SOLICITUD">ESVIAL TRANSITO ESMERALDAS - SOLICITUD</option>
+    <option value="ETAFASHION PLANETA">ETAFASHION PLANETA</option>
+    <option value="ETAPA">ETAPA</option>
+    <option value="Etapa - Orden De Cobro">Etapa - Orden De Cobro</option>
+    <option value="FACES - MICROFINANZAS">FACES - MICROFINANZAS</option>
+    <option value="FEDERACION DEPORTIVA DEL GUAYAS">FEDERACION DEPORTIVA DEL GUAYAS</option>
+    <option value="FERREMUNDO">FERREMUNDO</option>
+    <option value="FOREVER LIVING">FOREVER LIVING</option>
+    <option value="FOTOMULTAS QUEVIAL - CITACIONES QUEVEDO">FOTOMULTAS QUEVIAL - CITACIONES QUEVEDO</option>
+    <option value="GAD BABAHOYO TRANSVIAL">GAD BABAHOYO TRANSVIAL</option>
+    <option value="GAD BABAHOYO TRANSVIAL - CITACIONES / CONVENIOS">GAD BABAHOYO TRANSVIAL - CITACIONES / CONVENIOS</option>
+    <option value="GAD BABAHOYO TRANSVIAL - SOLICITUD">GAD BABAHOYO TRANSVIAL - SOLICITUD</option>
+    <option value="GAD DURAN ATD - CITACIONES RADARES">GAD DURAN ATD - CITACIONES RADARES</option>
+    <option value="GAD DURAN ATD - MULTAS AGENTES DE TRANSITO">GAD DURAN ATD - MULTAS AGENTES DE TRANSITO</option>
+    <option value="GAD DURAN TRANSITO ATD - SOLICITUD">GAD DURAN TRANSITO ATD - SOLICITUD</option>
+    <option value="Gad Esmerald - Tramites De Transito">Gad Esmerald - Tramites De Transito</option>
+    <option value="GAD MOVILIDAD OÑA - CITACIONES">GAD MOVILIDAD OÑA - CITACIONES</option>
+    <option value="GAD QUITO CITACIONES / AMT">GAD QUITO CITACIONES / AMT</option>
+    <option value="GAMMA">GAMMA</option>
+    <option value="GESTIONA COBRANZA TARJETAS DE CREDITO">GESTIONA COBRANZA TARJETAS DE CREDITO</option>
+    <option value="GOB MANABI">GOB MANABI</option>
+    <option value="GOB TUNGURAHUA">GOB TUNGURAHUA</option>
+    <option value="Gobmanabi - Tramites De Transito">Gobmanabi - Tramites De Transito</option>
+    <option value="GONET">GONET</option>
+    <option value="HAPPY CEL - CELULARES A CREDITO">HAPPY CEL - CELULARES A CREDITO</option>
+    <option value="HERBALIFE">HERBALIFE</option>
+    <option value="HUGHES NET INTERNET SATELITAL">HUGHES NET INTERNET SATELITAL</option>
+    <option value="IEPI - SENADI">IEPI - SENADI</option>
+    <option value="IESS - AFILIADO / EMPLEADOR">IESS - AFILIADO / EMPLEADOR</option>
+    <option value="IESS - COMPROBANTE">IESS - COMPROBANTE</option>
+    <option value="Iess Quito - Afiliado">Iess Quito - Afiliado</option>
+    <option value="Iess Quito - Empleador">Iess Quito - Empleador</option>
+    <option value="IFTH - (IECE) - SENESCYTCRED">IFTH - (IECE) - SENESCYTCRED</option>
+    <option value="INSOTEC">INSOTEC</option>
+    <option value="INTERAGUA">INTERAGUA</option>
+    <option value="INTERAGUA - CUPONES">INTERAGUA - CUPONES</option>
+    <option value="Interagua - Recaudacion En Linea">Interagua - Recaudacion En Linea</option>
+    <option value="Interagua - Recaudacion Vtanilla Agua Potabl">Interagua - Recaudacion Vtanilla Agua Potabl</option>
+    <option value="INTERAGUA - TASA DE RECOLECCION DE BASURA">INTERAGUA - TASA DE RECOLECCION DE BASURA</option>
+    <option value="INTERAGUA OFFLINE">INTERAGUA OFFLINE</option>
+    <option value="INTERAGUA PAGOS PARCIALES">INTERAGUA PAGOS PARCIALES</option>
+    <option value="INTERCOM">INTERCOM</option>
+    <option value="INTERDATOS INTERNET">INTERDATOS INTERNET</option>
+    <option value="IST BOLIVARIANO - Instituto superior tecnologico I">IST BOLIVARIANO - Instituto superior tecnologico I</option>
+    <option value="JARDINES DE ESPERANZA">JARDINES DE ESPERANZA</option>
+    <option value="Judicatura - Empresas">Judicatura - Empresas</option>
+    <option value="Judicatura - Personas">Judicatura - Personas</option>
+    <option value="KOE">KOE</option>
+    <option value="Latintravel - Pago">Latintravel - Pago</option>
+    <option value="LEONISA">LEONISA</option>
+    <option value="Leonisa - Orden De Cobro">Leonisa - Orden De Cobro</option>
+    <option value="LEUDINE">LEUDINE</option>
+    <option value="LOJA - AGUA">LOJA - AGUA</option>
+    <option value="LOJA - TRANSITO">LOJA - TRANSITO</option>
+    <option value="MACHALA - REGISTRO DE LA PROPIEDAD">MACHALA - REGISTRO DE LA PROPIEDAD</option>
+    <option value="MANCOMUNADO TUNGURAHUA">MANCOMUNADO TUNGURAHUA</option>
+    <option value="MARCIMEX">MARCIMEX</option>
+    <option value="MASNET INTERNET">MASNET INTERNET</option>
+    <option value="MASTERCARD - PACIFICARD">MASTERCARD - PACIFICARD</option>
+    <option value="MASTERCARD - PRODUBANCO">MASTERCARD - PRODUBANCO</option>
+    <option value="MEJORAMIENTO VIAL PICHINCHA">MEJORAMIENTO VIAL PICHINCHA</option>
+    <option value="Metropro Tra - Recaudacion Con Informacion">Metropro Tra - Recaudacion Con Informacion</option>
+    <option value="Min De Produ - Recaudacion Con Informacion">Min De Produ - Recaudacion Con Informacion</option>
+    <option value="Min Gobierno - Recaudacion Con Informacion">Min Gobierno - Recaudacion Con Informacion</option>
+    <option value="Min Gobierno - Recaudacion Sin Informacion">Min Gobierno - Recaudacion Sin Informacion</option>
+    <option value="Min Interior - Orden De Cobro">Min Interior - Orden De Cobro</option>
+    <option value="Min Interior - Recaudacion Sin Informacion">Min Interior - Recaudacion Sin Informacion</option>
+    <option value="MINISTERIO DE GOBIERNO / DEL INTERIOR">MINISTERIO DE GOBIERNO / DEL INTERIOR</option>
+    <option value="MINISTERIO DE GOBIERNO / DEL INTERIOR (SIN INFO)">MINISTERIO DE GOBIERNO / DEL INTERIOR (SIN INFO)</option>
+    <option value="MIO">MIO</option>
+    <option value="Movidelnor - Recaudacion Con Informacion">Movidelnor - Recaudacion Con Informacion</option>
+    <option value="Movil Pasaje - Por Identificacion">Movil Pasaje - Por Identificacion</option>
+    <option value="Movil Pasaje - Por Placa">Movil Pasaje - Por Placa</option>
+    <option value="Movil Pasaje - Por Solicitud">Movil Pasaje - Por Solicitud</option>
+    <option value="MOVILIDAD BALZAR - CITACIONES RADARES">MOVILIDAD BALZAR - CITACIONES RADARES</option>
+    <option value="MOVILIDAD CAYAMBE - SOLICITUD">MOVILIDAD CAYAMBE - SOLICITUD</option>
+    <option value="MOVILIDAD CHONE - CITACIONES / CONVENIO">MOVILIDAD CHONE - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD CHONE - SOLICITUD">MOVILIDAD CHONE - SOLICITUD</option>
+    <option value="MOVILIDAD COTOPAXI - RODAJE">MOVILIDAD COTOPAXI - RODAJE</option>
+    <option value="MOVILIDAD DAULE - CITACIONES / CONVENIO">MOVILIDAD DAULE - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD DEL EMPALME - CITACIONES / CONVENIO">MOVILIDAD DEL EMPALME - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD DEL NORTE - CITACIONES / CONVENIO">MOVILIDAD DEL NORTE - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD DEL NORTE - MANCOMUNIDAD">MOVILIDAD DEL NORTE - MANCOMUNIDAD</option>
+    <option value="MOVILIDAD DEL NORTE - MOBILITY-DINAMICA">MOVILIDAD DEL NORTE - MOBILITY-DINAMICA</option>
+    <option value="MOVILIDAD DEL NORTE - SOLICITUD">MOVILIDAD DEL NORTE - SOLICITUD</option>
+    <option value="MOVILIDAD DEL NORTE SIN INFORMACION - MANCOMUNIDAD">MOVILIDAD DEL NORTE SIN INFORMACION - MANCOMUNIDAD</option>
+    <option value="MOVILIDAD FLAVIO ALFARO - CITACIONES / CONVENIO">MOVILIDAD FLAVIO ALFARO - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD FLAVIO ALFARO - SOLICITUD">MOVILIDAD FLAVIO ALFARO - SOLICITUD</option>
+    <option value="MOVILIDAD GAD DE BUCAY">MOVILIDAD GAD DE BUCAY</option>
+    <option value="MOVILIDAD JAMA - CITACIONES RADARES">MOVILIDAD JAMA - CITACIONES RADARES</option>
+    <option value="MOVILIDAD JAMA - SOLICITUD">MOVILIDAD JAMA - SOLICITUD</option>
+    <option value="MOVILIDAD JUJAN - CITACIONES / CONVENIO">MOVILIDAD JUJAN - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD JUJAN - SOLICITUD">MOVILIDAD JUJAN - SOLICITUD</option>
+    <option value="MOVILIDAD JUNIN - CITACIONES RADARES">MOVILIDAD JUNIN - CITACIONES RADARES</option>
+    <option value="MOVILIDAD LA CONCORDIA - CITACIONES / CONVENIO">MOVILIDAD LA CONCORDIA - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD LATACUNGA - CITACIONES / CONVENIO">MOVILIDAD LATACUNGA - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD LATACUNGA - SOLICITUD">MOVILIDAD LATACUNGA - SOLICITUD</option>
+    <option value="MOVILIDAD LOS RIOS - PREFECTURA">MOVILIDAD LOS RIOS - PREFECTURA</option>
+    <option value="MOVILIDAD MACHALA - CITACIONES / CONVENIO">MOVILIDAD MACHALA - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD MACHALA - SOLICITUD">MOVILIDAD MACHALA - SOLICITUD</option>
+    <option value="MOVILIDAD MONTECRISTI - CITACIONES">MOVILIDAD MONTECRISTI - CITACIONES</option>
+    <option value="MOVILIDAD NARANJAL - CITACIONES / CONVENIO">MOVILIDAD NARANJAL - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD PEDERNALES - CITACIONES">MOVILIDAD PEDERNALES - CITACIONES</option>
+    <option value="MOVILIDAD PLAYAS - CITACIONES / CONVENIO">MOVILIDAD PLAYAS - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD PLAYAS - SOLICITUD">MOVILIDAD PLAYAS - SOLICITUD</option>
+    <option value="MOVILIDAD PORTOVIAL - CITACIONES / CONVENIO">MOVILIDAD PORTOVIAL - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD PORTOVIAL - SOLICITUD">MOVILIDAD PORTOVIAL - SOLICITUD</option>
+    <option value="MOVILIDAD PUERTO LOPEZ CTE - CITACIONES / CONVEN">MOVILIDAD PUERTO LOPEZ CTE - CITACIONES / CONVEN</option>
+    <option value="MOVILIDAD QUIJOS - CITACIONES / CONVENIO">MOVILIDAD QUIJOS - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD SALINAS CTE - CITACIONES / CONVENIO">MOVILIDAD SALINAS CTE - CITACIONES / CONVENIO</option>
+    <option value="MOVILIDAD SAN JACINTO YAGUACHI - CITACIONES">MOVILIDAD SAN JACINTO YAGUACHI - CITACIONES</option>
+    <option value="MOVILIDAD SAN VICENTE CTE - CITACIONES / CONVENI">MOVILIDAD SAN VICENTE CTE - CITACIONES / CONVENI</option>
+    <option value="MOVILIDAD SANTA ELENA CTE - CITACIONES / CONVENI">MOVILIDAD SANTA ELENA CTE - CITACIONES / CONVENI</option>
+    <option value="MOVILIDAD TRANSITO PASAJE">MOVILIDAD TRANSITO PASAJE</option>
+    <option value="MOVILIDAD TRANSITO PASAJE - SOLICITUD">MOVILIDAD TRANSITO PASAJE - SOLICITUD</option>
+    <option value="Movilmachala - Por Identificacion">Movilmachala - Por Identificacion</option>
+    <option value="Movilmachala - Por Placa">Movilmachala - Por Placa</option>
+    <option value="Movilmachala - Por Solicitud">Movilmachala - Por Solicitud</option>
+    <option value="MOVISTAR COMBOS RECARGAS ILIMITADAS">MOVISTAR COMBOS RECARGAS ILIMITADAS</option>
+    <option value="MOVISTAR RECARGAS">MOVISTAR RECARGAS</option>
+    <option value="MOVISTAR RECARGAS - BONOS">MOVISTAR RECARGAS - BONOS</option>
+    <option value="MUEBLES EL BOSQUE S.A., PAGO DE CUOTAS">MUEBLES EL BOSQUE S.A., PAGO DE CUOTAS</option>
+    <option value="MULTAS CITACIONES MILAGRO EMOVIM ACT">MULTAS CITACIONES MILAGRO EMOVIM ACT</option>
+    <option value="Mun Pelileo - Recaudaciones Municipio">Mun Pelileo - Recaudaciones Municipio</option>
+    <option value="MUNICIPIO AMBATO">MUNICIPIO AMBATO</option>
+    <option value="MUNICIPIO BABAHOYO">MUNICIPIO BABAHOYO</option>
+    <option value="MUNICIPIO CAYAMBE">MUNICIPIO CAYAMBE</option>
+    <option value="MUNICIPIO COTACACHI">MUNICIPIO COTACACHI</option>
+    <option value="MUNICIPIO DE CHONE">MUNICIPIO DE CHONE</option>
+    <option value="MUNICIPIO DE CUENCA">MUNICIPIO DE CUENCA</option>
+    <option value="MUNICIPIO DE GUAYAQUIL">MUNICIPIO DE GUAYAQUIL</option>
+    <option value="MUNICIPIO DE GUAYAQUIL - CEP">MUNICIPIO DE GUAYAQUIL - CEP</option>
+    <option value="MUNICIPIO DE MANTA">MUNICIPIO DE MANTA</option>
+    <option value="MUNICIPIO DE MEJIA">MUNICIPIO DE MEJIA</option>
+    <option value="MUNICIPIO DE PORTOVIEJO">MUNICIPIO DE PORTOVIEJO</option>
+    <option value="MUNICIPIO DE QUITO - PREDIOS">MUNICIPIO DE QUITO - PREDIOS</option>
+    <option value="MUNICIPIO DE QUITO EN LINEA">MUNICIPIO DE QUITO EN LINEA</option>
+    <option value="MUNICIPIO DE SUCRE">MUNICIPIO DE SUCRE</option>
+    <option value="MUNICIPIO DURAN - PREDIO RURAL">MUNICIPIO DURAN - PREDIO RURAL</option>
+    <option value="MUNICIPIO DURAN - PREDIO URBANO">MUNICIPIO DURAN - PREDIO URBANO</option>
+    <option value="MUNICIPIO GUARANDA">MUNICIPIO GUARANDA</option>
+    <option value="MUNICIPIO IBARRA">MUNICIPIO IBARRA</option>
+    <option value="MUNICIPIO IBARRA 2">MUNICIPIO IBARRA 2</option>
+    <option value="MUNICIPIO LOJA">MUNICIPIO LOJA</option>
+    <option value="MUNICIPIO MILAGRO">MUNICIPIO MILAGRO</option>
+    <option value="MUNICIPIO OTAVALO - PATENTE">MUNICIPIO OTAVALO - PATENTE</option>
+    <option value="MUNICIPIO OTAVALO - PREDIO RURAL">MUNICIPIO OTAVALO - PREDIO RURAL</option>
+    <option value="MUNICIPIO OTAVALO - PREDIO URBANO">MUNICIPIO OTAVALO - PREDIO URBANO</option>
+    <option value="MUNICIPIO OTAVALO - TRANSITO Y VARIOS">MUNICIPIO OTAVALO - TRANSITO Y VARIOS</option>
+    <option value="MUNICIPIO QUEVEDO">MUNICIPIO QUEVEDO</option>
+    <option value="MUNICIPIO RIOBAMBA">MUNICIPIO RIOBAMBA</option>
+    <option value="MUNICIPIO RIOBAMBA - ORDEN DE PAGO">MUNICIPIO RIOBAMBA - ORDEN DE PAGO</option>
+    <option value="MUNICIPIO RUMINAHUI">MUNICIPIO RUMINAHUI</option>
+    <option value="MUNICIPIO SAMBORONDON">MUNICIPIO SAMBORONDON</option>
+    <option value="MUNICIPIO SANTO DOMINGO">MUNICIPIO SANTO DOMINGO</option>
+    <option value="MUNICIPIO_ESMERALDAS">MUNICIPIO_ESMERALDAS</option>
+    <option value="Municipioamb - Tramites De Transito">Municipioamb - Tramites De Transito</option>
+    <option value="Municipiocue - Recaudaciones Municipio">Municipiocue - Recaudaciones Municipio</option>
+    <option value="Municipiogye - Predios">Municipiogye - Predios</option>
+    <option value="Municipioloj - Citacion Por Identificacion">Municipioloj - Citacion Por Identificacion</option>
+    <option value="Municipioloj - Citacion Por Placa">Municipioloj - Citacion Por Placa</option>
+    <option value="Municipioloj - Recaudaciones Municipio">Municipioloj - Recaudaciones Municipio</option>
+    <option value="Municipioman - Recaudaciones Municipio">Municipioman - Recaudaciones Municipio</option>
+    <option value="Municipioman - Tramites De Transito">Municipioman - Tramites De Transito</option>
+    <option value="Municipioota - Orden De Cobro">Municipioota - Orden De Cobro</option>
+    <option value="Municipioqui - Recaudaciones Municipio">Municipioqui - Recaudaciones Municipio</option>
+    <option value="Municipiorio - Recaudaciones Municipio">Municipiorio - Recaudaciones Municipio</option>
+    <option value="Municipiorio - Tramites De Transito">Municipiorio - Tramites De Transito</option>
+    <option value="Municipiosta - Orden De Cobro">Municipiosta - Orden De Cobro</option>
+    <option value="MUTUALISTA PICHINCHA">MUTUALISTA PICHINCHA</option>
+    <option value="NATURA & AVON">NATURA & AVON</option>
+    <option value="NETFLIX">NETFLIX</option>
+    <option value="NETLIFE">NETLIFE</option>
+    <option value="NIVI">NIVI</option>
+    <option value="NOVOTAXI">NOVOTAXI</option>
+    <option value="OMNILIFE">OMNILIFE</option>
+    <option value="ONFIBER INTERNET">ONFIBER INTERNET</option>
+    <option value="ORIFLAME">ORIFLAME</option>
+    <option value="Otecel - Recaudacion Planes Celular">Otecel - Recaudacion Planes Celular</option>
+    <option value="PAGO SEGURO / PAGO EFECTIVO">PAGO SEGURO / PAGO EFECTIVO</option>
+    <option value="PARQUES DE LA PAZ">PARQUES DE LA PAZ</option>
+    <option value="PEAJE RUMIÑAHUI POSTPAGO">PEAJE RUMIÑAHUI POSTPAGO</option>
+    <option value="PEAJE TUNEL GUAYASAMIN POSTPAGO">PEAJE TUNEL GUAYASAMIN POSTPAGO</option>
+    <option value="PISAME">PISAME</option>
+    <option value="PLANES CLARO">PLANES CLARO</option>
+    <option value="PLANES CNT CELULAR">PLANES CNT CELULAR</option>
+    <option value="PLANES DIRECTV">PLANES DIRECTV</option>
+    <option value="PLANES MOVISTAR">PLANES MOVISTAR</option>
+    <option value="PORTCOLL-HYUNDAI">PORTCOLL-HYUNDAI</option>
+    <option value="Portoaguas - Recaudacion Agua Potable">Portoaguas - Recaudacion Agua Potable</option>
+    <option value="PORTOAGUAS EPMAPAP AGUA PORTOVIEJO">PORTOAGUAS EPMAPAP AGUA PORTOVIEJO</option>
+    <option value="Portovial - Tramites De Transito">Portovial - Tramites De Transito</option>
+    <option value="Prefecturasd - Recaudacion Sin Informacion">Prefecturasd - Recaudacion Sin Informacion</option>
+    <option value="PRONACA">PRONACA</option>
+    <option value="PUNTONET">PUNTONET</option>
+    <option value="PYCCA">PYCCA</option>
+    <option value="RECARGA EL CANAL DEL FUTBOL">RECARGA EL CANAL DEL FUTBOL</option>
+    <option value="RECARGA GOLTV">RECARGA GOLTV</option>
+    <option value="RECARGAS PANAVIAL TELEPASS">RECARGAS PANAVIAL TELEPASS</option>
+    <option value="REDECOM INTERNET">REDECOM INTERNET</option>
+    <option value="Reg Civil - Orden De Cobro">Reg Civil - Orden De Cobro</option>
+    <option value="REGISTRO CIVIL - CEDULAS Y PASAPORTES">REGISTRO CIVIL - CEDULAS Y PASAPORTES</option>
+    <option value="REGISTRO CIVIL - PASAPORTE TERCERA EDAD RENOVACION">REGISTRO CIVIL - PASAPORTE TERCERA EDAD RENOVACION</option>
+    <option value="REGISTRO CIVIL CON ORDEN DE PAGO">REGISTRO CIVIL CON ORDEN DE PAGO</option>
+    <option value="REGISTRO PROPIEDAD - OTAVALO">REGISTRO PROPIEDAD - OTAVALO</option>
+    <option value="REGISTRO PROPIEDAD GUAYAQUIL">REGISTRO PROPIEDAD GUAYAQUIL</option>
+    <option value="REVISION VEHICULAR MILAGRO EMOVIM ACT">REVISION VEHICULAR MILAGRO EMOVIM ACT</option>
+    <option value="REVISION VEHICULAR PAUTE EMOVPAUTE">REVISION VEHICULAR PAUTE EMOVPAUTE</option>
+    <option value="RM - REBAJA MODA">RM - REBAJA MODA</option>
+    <option value="SAE">SAE</option>
+    <option value="SAITEL">SAITEL</option>
+    <option value="SECURITY DATA">SECURITY DATA</option>
+    <option value="SEGURO PESQUERO - SEG SUCRE">SEGURO PESQUERO - SEG SUCRE</option>
+    <option value="Senadi - Recaudacion Con Informacion">Senadi - Recaudacion Con Informacion</option>
+    <option value="SENAE - ADUANA DEL ECUADOR">SENAE - ADUANA DEL ECUADOR</option>
+    <option value="SENATEL">SENATEL</option>
+    <option value="Senescyt - Recaudacion Centros Educativos">Senescyt - Recaudacion Centros Educativos</option>
+    <option value="Senescytcred - Orden De Cobro">Senescytcred - Orden De Cobro</option>
+    <option value="SEREXSA – JUNTA DE BENEFICIENCIA">SEREXSA – JUNTA DE BENEFICIENCIA</option>
+    <option value="Setel - Recaudacion Tv Pagada">Setel - Recaudacion Tv Pagada</option>
+    <option value="SPEEDY INTERNET / TV">SPEEDY INTERNET / TV</option>
+    <option value="SRI - AJUSTES">SRI - AJUSTES</option>
+    <option value="SRI - CEP">SRI - CEP</option>
+    <option value="Sri - Cobro Ajustes Sri">Sri - Cobro Ajustes Sri</option>
+    <option value="SRI - MATRICULACION VEHICULAR">SRI - MATRICULACION VEHICULAR</option>
+    <option value="SRI - MATRICULACION VEHICULAR 2">SRI - MATRICULACION VEHICULAR 2</option>
+    <option value="Sri - Rec Matriculacion Vehiculos">Sri - Rec Matriculacion Vehiculos</option>
+    <option value="Sri - Rec Uno Por Ciento Transf De Dominio">Sri - Rec Uno Por Ciento Transf De Dominio</option>
+    <option value="SRI - RISE">SRI - RISE</option>
+    <option value="Sri - Sri Impuestos Ofp">Sri - Sri Impuestos Ofp</option>
+    <option value="SRI - TRANSFERENCIA DE DOMINIO">SRI - TRANSFERENCIA DE DOMINIO</option>
+    <option value="SUPA - PENSIONES ALIMENTICIAS - PERSONAS">SUPA - PENSIONES ALIMENTICIAS - PERSONAS</option>
+    <option value="SUPA - PENSIONES ALIMENTICIAS EMPRESAS">SUPA - PENSIONES ALIMENTICIAS EMPRESAS</option>
+    <option value="SURTAX COURIER">SURTAX COURIER</option>
+    <option value="TARJETA ALIA - BANCO SOLIDARIO">TARJETA ALIA - BANCO SOLIDARIO</option>
+    <option value="TARJETAS DE CREDITO - COOPERATIVA COMERCIO">TARJETAS DE CREDITO - COOPERATIVA COMERCIO</option>
+    <option value="TRANSITO LATACUNGA - MOVILIDAD">TRANSITO LATACUNGA - MOVILIDAD</option>
+    <option value="TRANSITO SANTO DOMINGO - CITACIONES">TRANSITO SANTO DOMINGO - CITACIONES</option>
+    <option value="TRANSITO SANTO DOMINGO - SOLICITUD">TRANSITO SANTO DOMINGO - SOLICITUD</option>
+    <option value="Transito Sto - Tramites De Transito">Transito Sto - Tramites De Transito</option>
+    <option value="Transnave - Recaudacion Con Informacion">Transnave - Recaudacion Con Informacion</option>
+    <option value="Transvial Ep - Tramites De Transito">Transvial Ep - Tramites De Transito</option>
+    <option value="TU AYUDA CUENTA">TU AYUDA CUENTA</option>
+    <option value="TU PASAJE, PAGO DE TRANSPORTE TERRESTRE">TU PASAJE, PAGO DE TRANSPORTE TERRESTRE</option>
+    <option value="TUENTI RECARGAS">TUENTI RECARGAS</option>
+    <option value="TUENTI RECARGAS COMBOS">TUENTI RECARGAS COMBOS</option>
+    <option value="TVCABLE RECARGAS">TVCABLE RECARGAS</option>
+    <option value="U. MANABI">U. MANABI</option>
+    <option value="UNACH">UNACH</option>
+    <option value="UNIANDES">UNIANDES</option>
+    <option value="Uniandes - Recaudacion Centros Educativos">Uniandes - Recaudacion Centros Educativos</option>
+    <option value="UNIVERSIDAD CENTRAL DEL ECUADOR">UNIVERSIDAD CENTRAL DEL ECUADOR</option>
+    <option value="UNIVISA">UNIVISA</option>
+    <option value="UNIVISA RECARGAS">UNIVISA RECARGAS</option>
+    <option value="UTN">UTN</option>
+    <option value="UTPL">UTPL</option>
+    <option value="Utpl - Recaudacion Centros Educativos">Utpl - Recaudacion Centros Educativos</option>
+    <option value="VELOCITY / KLIX / LOJASYSTEM">VELOCITY / KLIX / LOJASYSTEM</option>
+    <option value="VISA - BANCO GENERAL RUMIÑAHUI">VISA - BANCO GENERAL RUMIÑAHUI</option>
+    <option value="VISA - PACIFICARD">VISA - PACIFICARD</option>
+    <option value="VISA - PRODUBANCO">VISA - PRODUBANCO</option>
+    <option value="XTRIM - TVCABLE EN LINEA">XTRIM - TVCABLE EN LINEA</option>
+    <option value="YANBAL">YANBAL</option>
+    <option value="Yanbal - Recaudacion Con Informacion">Yanbal - Recaudacion Con Informacion</option>
+    <option value="YIGA5">YIGA5</option>
+    <option value="Z DESHABILITADO AMAGUA">Z DESHABILITADO AMAGUA</option>
+    <option value="Z DESHABILITADO AVON">Z DESHABILITADO AVON</option>
+    <option value="ZERMAT S.A.">ZERMAT S.A.</option>
+    <option value="ORDEN 1">ORDEN 1</option>
+    <option value="ORDEN 2">ORDEN 2</option>
+    <option value="ORDEN 3">ORDEN 3</option>
+    <option value="ORDEN 4">ORDEN 4</option>
+    <option value="ORDEN 5">ORDEN 5</option>
+    <option value="ORDEN 6">ORDEN 6</option>
+    <option value="ORDEN 7">ORDEN 7</option>
+    <option value="ORDEN 8">ORDEN 8</option>
+    <option value="ORDEN 9">ORDEN 9</option>
+    <option value="ORDEN 10">ORDEN 10</option>
+    <option value="TURNO 1">TURNO 1</option>
+    <option value="TURNO 2">TURNO 2</option>
+    <option value="TURNO 3">TURNO 3</option>
+    <option value="TURNO 4">TURNO 4</option>
+    <option value="TURNO 5">TURNO 5</option>
+    <option value="TURNO 6">TURNO 6</option>
+    <option value="TURNO 7">TURNO 7</option>
+    <option value="TURNO 8">TURNO 8</option>
+    <option value="TURNO 9">TURNO 9</option>
+    <option value="TURNO 10">TURNO 10</option>
+    <option value="COMISION variable">COMISION variable</option>
+    <option value="COMISION 0,50">COMISION 0,50</option>
+    <option value="COMISION 0,75">COMISION 0,75</option>
+    <option value="COMISION 1">COMISION 1</option>
+    <option value="COMISION 2">COMISION 2</option>
+    <option value="COMISION 3">COMISION 3</option>
+    <option value="COMISION 4">COMISION 4</option>
+    <option value="COMISION 5">COMISION 5</option>
+    <option value="COMISION 6">COMISION 6</option>
+    <option value="COMISION 7">COMISION 7</option>
+    <option value="COMISION 8">COMISION 8</option>
+    <option value="COMISION 9">COMISION 9</option>
+    <option value="COMISION 10">COMISION 10</option>
+    <option value="Impresiones 0,10">Impresiones 0,10</option>
+    <option value="Impresiones 0,25">Impresiones 0,25</option>
+    <option value="Impresiones 0,50">Impresiones 0,50</option>
+    <option value="Impresiones 0,75">Impresiones 0,75</option>
+    <option value="Impresiones 1,00">Impresiones 1,00</option>
+    <option value="copias 0,10">copias 0,10</option>
+    <option value="copias 0,25">copias 0,25</option>
+    <option value="copias 0,75">copias 0,75</option>
+    <option value="Oficios 1,00">Oficios 1,00</option>
+    <option value="Oficios 1,50">Oficios 1,50</option>
+    <option value="Oficios 2,00">Oficios 2,00</option>
+    <option value="Emplasticados 0,25">Emplasticados 0,25</option>
+    <option value="Emplasticados 0,50">Emplasticados 0,50</option>
+    <option value="Emplasticados 0,75">Emplasticados 0,75</option>
+    <option value="Emplasticados 1,00">Emplasticados 1,00</option>
+    <option value="Emplasticados 2,00">Emplasticados 2,00</option>
+    <option value="Inventario">Inventario</option>
+    <option value="Especies Valoradas">Especies Valoradas</option>
+    <option value="Carpetas Carton azul">Carpetas Carton azul</option>
+    <option value="Carpetas Carton Mostaza">Carpetas Carton Mostaza</option>
+    <option value="Carpetas Carton Amarillo">Carpetas Carton Amarillo</option>
+    <option value="Carpetas Carton Verde">Carpetas Carton Verde</option>
+    <option value="Sobres manila B1">Sobres manila B1</option>
+    <option value="Sobres manila B2">Sobres manila B2</option>
+    <option value="Sobres manila B3">Sobres manila B3</option>
+    <option value="Sobres manila B4">Sobres manila B4</option>
+    <option value="Kit seguridad Negro Kia">Kit seguridad Negro Kia</option>
+    <option value="Kit seguridad Rojo 2lt">Kit seguridad Rojo 2lt</option>
+    <option value="Kit seguridad Rojo 5lt">Kit seguridad Rojo 5lt</option>
+    <option value="Kit seguridad Rojo 10lt">Kit seguridad Rojo 10lt</option>
+    <option value="Extintor 2lb">Extintor 2lb</option>
+    <option value="Extintor 5lb">Extintor 5lb</option>
+    <option value="Extintor 10lb">Extintor 10lb</option>
+</select>
+                                </td>
+                                <td style="display:none;">
+                                    <input type="number" class="form-control cantidad" name="productos[0][cantidad]" value="1" min="1" readonly>
+                                </td>
+                                <td><input type="number" step="0.01" class="form-control precio" name="productos[0][precio]" min="0" required></td>
+                                <td><input type="number" step="0.01" class="form-control comision" name="productos[0][comision]" readonly></td>
+                                <td>
+                                    <select class="form-select" name="productos[0][plataforma]">
+                                        <option value="">-- Plataforma --</option>
+                                        <option value="ZN">ZN</option>
+                                        <option value="CXP">CXP</option>
+                                        <option value="CNB_117">CNB_117</option>
+                                        <option value="CNB_111">CNB_111</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" step="0.01" class="form-control total_producto" name="productos[0][total_producto]" readonly></td>
+                                <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">🗑️</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Botón Imprimir -->
+                <div class="mb-2 text-end">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="imprimirProductos()">🖨️ Imprimir Productos</button>
+                </div>
+
+                <!-- Totales -->
+<div class="row mb-2 align-items-start">
+    <!-- Descripción -->
+    <div class="col-md-6">
+        <label for="txt_descripcion" class="form-label fw-semibold">Descripción:</label>
+        <textarea class="form-control form-control-sm" name="txt_descripcion" id="txt_descripcion" rows="5"></textarea>
+    </div>
+
+    <!-- Totales -->
+ <div class="col-md-6 text-end">
+    <small style="display:none;">Comisiones: $<span id="total_comisiones">0.00</span></small><br>
+    <small style="display:none;">IVA: $<span id="total_iva">0.00</span></small><br>
+    <small>Subtotal: $<span id="subtotal_compra">0.00</span></small><br>
+    <strong>Total: $<span id="total_compra">0.00</span></strong><br>
+    <strong class="text-success" id="lbl_vuelto">Vuelto: $0.00</strong>
+</div>
+
+                <!-- Formas de pago -->
+<div class="mb-2">
+    <label class="form-label fw-semibold">Formas de Pago:</label>
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Método</th>
+                    <th>Monto</th>
+                    <th>Banco / Cuenta / Comprobante</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for metodo in metodos_pago %}
+                <tr>
+                    <td>{{ metodo.descripcion }}</td>
+                    <td>
+                        <input type="number" step="0.01" min="0" class="form-control monto_pago" 
+                               name="pagos[{{ metodo.id }}][monto]" 
+                               value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.monto_pagado }}{% endif %}{% endfor %}">
+                    </td>
+                    <td>
+                        <div class="transferencia_campos" style="display:none;">
+                            <input type="text" class="form-control form-control-sm mb-1" 
+                                   placeholder="Banco" name="pagos[{{ metodo.id }}][banco]"
+                                   value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.banco }}{% endif %}{% endfor %}">
+                            <input type="text" class="form-control form-control-sm mb-1" 
+                                   placeholder="Cuenta" name="pagos[{{ metodo.id }}][cuenta]"
+                                   value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.cuenta }}{% endif %}{% endfor %}">
+                            <input type="text" class="form-control form-control-sm" 
+                                   placeholder="Comprobante" name="pagos[{{ metodo.id }}][comprobante]"
+                                   value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.comprobante }}{% endif %}{% endfor %}">
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Función para mostrar/ocultar campos de transferencia según el método y monto
+function actualizarCamposTransferencia() {
+    document.querySelectorAll('.monto_pago').forEach(input => {
+        const fila = input.closest('tr');
+        const metodo = fila.querySelector('td:first-child').textContent.trim().toLowerCase();
+        const campos = fila.querySelector('.transferencia_campos');
+
+        if (metodo.includes('transferencia') && parseFloat(input.value || 0) > 0) {
+            campos.style.display = 'block';
+        } else {
+            campos.style.display = 'none';
+        }
+    });
+}
+
+// Ejecutar al cargar la página (para editar venta)
+document.addEventListener('DOMContentLoaded', function() {
+    actualizarCamposTransferencia();
+});
+
+// Ejecutar cuando se modifique un monto
+document.querySelectorAll('.monto_pago').forEach(input => {
+    input.addEventListener('input', actualizarCamposTransferencia);
+});
+</script>
+
+
+                <!-- Caja y Sucursal -->
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label for="select_caja" class="form-label fw-semibold">Caja:</label>
+                        <select class="form-select form-select-sm" name="select_caja" id="select_caja" required>
+                            <option value="">-- Seleccione Caja --</option>
+                            {% for caja in cajas %}
+                                <option value="{{ caja.id }}">{{ caja.nombre }} - {{ caja.sucursal.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="select_sucursal" class="form-label fw-semibold">Sucursal:</label>
+                        <select class="form-select form-select-sm" name="select_sucursal" id="select_sucursal" required>
+                            <option value="">-- Seleccione Sucursal --</option>
+                            {% for sucursal in sucursales %}
+                                <option value="{{ sucursal.id }}">{{ sucursal.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="text-center mb-2">
+                    <button type="submit" class="btn btn-success btn-sm me-1">Guardar</button>
+                    <a href="{% url 'listado_ventas' %}" class="btn btn-danger btn-sm">Cancelar</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Estilos compactos -->
+<style>
+.form-container {
+    background: #fff;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.form-control-sm, .form-select-sm {
+    height: 26px;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+}
+
+textarea.form-control-sm {
+    height: 40px;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+    resize: vertical;
+}
+
+.table-sm th, .table-sm td {
+    padding: 2px 4px;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+h4, strong, small {
+    margin: 0;
+    padding: 0;
+}
+</style>
+
+<!-- Script JS -->
+<script>
+let contador = 1;
+const IVA_PERCENT = 0.15;
+const comisiones = [
+    { desde: 0.01, hasta: 5, comision_banco: 0.6, comision_local: 0.50 },
+    { desde: 5.01, hasta: 200, comision_banco: 0.6, comision_local: 1.00 },
+    { desde: 200.01, hasta: 300, comision_banco: 0.6, comision_local: 1.50 },
+    { desde: 300.01, hasta: 400, comision_banco: 0.6, comision_local: 2.00 },
+    { desde: 400.01, hasta: 500, comision_banco: 0.6, comision_local: 2.50 },
+    { desde: 500.01, hasta: 600, comision_banco: 0.6, comision_local: 3.00 },
+    { desde: 600.01, hasta: 700, comision_banco: 0.6, comision_local: 3.50 },
+    { desde: 700.01, hasta: 800, comision_banco: 0.6, comision_local: 4.00 },
+    { desde: 800.01, hasta: 900, comision_banco: 0.6, comision_local: 4.50 },
+    { desde: 900.01, hasta: 2000, comision_banco: 0.6, comision_local: 15.00 }
+];
+
+function calcularComision(precio){
+    for(let c of comisiones){
+        if(precio >= c.desde && precio <= c.hasta) return c.comision_banco + c.comision_local;
+    }
+    return 0;
+}
+
+function calcularTotal(){
+    let subtotal = 0;
+    let suma_comision_sin_iva = 0;
+    let total_iva = 0;
+
+    document.querySelectorAll('#tbody_productos tr').forEach(fila=>{
+        const cantidad = parseFloat(fila.querySelector('[name*="[cantidad]"]').value || 1);
+        const precio = parseFloat(fila.querySelector('.precio').value || 0);
+
+        // Calculamos comisión por producto
+        const comision_producto = calcularComision(precio) * cantidad;
+
+        // Dividimos la comisión para separar IVA
+        const comision_sin_iva = comision_producto / 1.15;
+        const iva_producto = comision_producto - comision_sin_iva;
+
+        // Guardamos valores en la fila
+        fila.querySelector('.comision').value = comision_sin_iva.toFixed(2);
+
+        // Sumar a totales
+        subtotal += precio * cantidad;
+        suma_comision_sin_iva += comision_sin_iva;
+        total_iva += iva_producto;
+
+        // Total por producto = precio + comisión completa (ya con IVA incluido)
+        fila.querySelector('.total_producto').value = (precio + comision_producto).toFixed(2);
+    });
+
+    const total_compra = subtotal + suma_comision_sin_iva + total_iva;
+
+    // Actualizamos los elementos en el HTML
+    document.getElementById('subtotal_compra').textContent = subtotal.toFixed(2);
+    document.getElementById('total_comisiones').textContent = suma_comision_sin_iva.toFixed(2);
+    document.getElementById('total_iva').textContent = total_iva.toFixed(2);
+    document.getElementById('total_compra').textContent = total_compra.toFixed(2);
+
+    calcularVuelto();
+}
+
+function calcularVuelto(){
+    let total_pagos = 0;
+    document.querySelectorAll('.monto_pago').forEach(pago=>{
+        total_pagos += parseFloat(pago.value || 0);
+    });
+    const total_compra = parseFloat(document.getElementById('total_compra').textContent || 0);
+    const vuelto = total_pagos - total_compra;
+    document.getElementById('lbl_vuelto').textContent = `Vuelto: $${vuelto.toFixed(2)}`;
+}
+
+function agregarFila(){
+    const tbody = document.getElementById('tbody_productos');
+    const filaBase = document.querySelector('.fila_base');
+    const nuevaFila = filaBase.cloneNode(true);
+
+    nuevaFila.querySelectorAll('input, select').forEach(el=>{
+        const name = el.getAttribute('name');
+        if(name) el.setAttribute('name', name.replace(/\d+/, contador));
+        if(el.classList.contains('precio') || el.classList.contains('comision') || el.classList.contains('total_producto')) el.value = 0;
+        if(el.classList.contains('cantidad')) el.value = 1;
+        if(el.tagName === 'SELECT') el.selectedIndex = 0;
+    });
+
+    tbody.appendChild(nuevaFila);
+    contador++;
+
+    nuevaFila.querySelector('.select-producto').addEventListener('change', function(){
+        if(this.value !== "") agregarFila();
+        calcularTotal();
+    });
+
+    calcularTotal();
+    
+    return nuevaFila;
+}
+
+document.querySelector('.fila_base .select-producto').addEventListener('change', function(){
+    if(this.value !== "") agregarFila();
+});
+
+function eliminarFila(boton){
+    const filas = document.querySelectorAll('#tbody_productos tr');
+    if(filas.length > 1){
+        boton.closest('tr').remove();
+        calcularTotal();
+    }
+}
+
+document.addEventListener('input', function(e){
+    if(e.target.classList.contains('precio') || e.target.classList.contains('cantidad') || e.target.classList.contains('monto_pago')){
+        calcularTotal();
+    }
+});
+
+calcularTotal();
+
+/* ============================================================
+   FUNCIÓN PARA IMPRIMIR SOLO LOS PRODUCTOS
+============================================================ */
+function imprimirProductos() {
+    // Obtener la fecha y hora actual
+    const ahora = new Date();
+    const fecha = ahora.toLocaleDateString('es-EC', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric' 
+    });
+    const hora = ahora.toLocaleTimeString('es-EC', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+
+    // Obtener datos del cliente
+    const cedula = document.getElementById('txt_cedula').value || '';
+    const nombre = document.getElementById('txt_nombre').value || '';
+    const descripcion = document.getElementById('txt_descripcion').value || '';
+
+    // Seleccionamos solo filas con un producto seleccionado
+    const filas = Array.from(document.querySelectorAll("#tbody_productos tr"))
+        .filter(fila => fila.querySelector(".select-producto").value !== "");
+
+    // Construimos la tabla para imprimir
+    let tabla = `<table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Comisión</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+    filas.forEach(fila => {
+        const producto = fila.querySelector(".select-producto").value;
+        const precio = parseFloat(fila.querySelector(".precio").value).toFixed(2);
+        const comision = parseFloat(fila.querySelector(".comision").value).toFixed(2);
+        const total = parseFloat(fila.querySelector(".total_producto").value).toFixed(2);
+
+        tabla += `<tr>
+                    <td>${producto}</td>
+                    <td>$${precio}</td>
+                    <td>$${comision}</td>
+                    <td>$${total}</td>
+                  </tr>`;
+    });
+
+    tabla += `</tbody></table>`;
+
+    const subtotal = parseFloat(document.getElementById("subtotal_compra").textContent).toFixed(2);
+    const comisiones = parseFloat(document.getElementById("total_comisiones").textContent).toFixed(2);
+    const iva = parseFloat(document.getElementById("total_iva").textContent).toFixed(2);
+    const total = parseFloat(document.getElementById("total_compra").textContent).toFixed(2);
+
+    const ventana = window.open("", "PRINT", "height=700,width=900");
+    ventana.document.write(`
+        <html>
+        <head>
+            <title>Productos Seleccionados</title>
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                body {
+                    font-family: 'Arial', sans-serif;
+                    padding: 20px;
+                    background: #fff;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    border-bottom: 2px solid #333;
+                    padding-bottom: 15px;
+                }
+                .header h2 {
+                    color: #333;
+                    font-size: 24px;
+                    margin-bottom: 10px;
+                }
+                .info-cliente {
+                    margin-bottom: 20px;
+                    background: #f8f9fa;
+                    padding: 15px;
+                    border-radius: 5px;
+                }
+                .info-cliente p {
+                    margin: 5px 0;
+                    font-size: 14px;
+                }
+                .info-fecha {
+                    text-align: right;
+                    margin-bottom: 10px;
+                    color: #666;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                    margin-bottom: 30px;
+                }
+                th {
+                    background-color: #343a40;
+                    color: white;
+                    font-weight: bold;
+                    padding: 12px 8px;
+                    text-align: center;
+                    border: 1px solid #ddd;
+                }
+                td {
+                    padding: 10px 8px;
+                    text-align: center;
+                    border: 1px solid #ddd;
+                }
+                tr:nth-child(even) {
+                    background-color: #f8f9fa;
+                }
+                .totales {
+                    margin-top: 20px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-align: right;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 5px;
+                }
+                .totales p {
+                    margin: 8px 0;
+                }
+                .totales strong {
+                    color: #007bff;
+                }
+                .total-final {
+                    font-size: 20px;
+                    color: #28a745;
+                    border-top: 2px solid #333;
+                    padding-top: 10px;
+                }
+                @media print {
+                    body {
+                        padding: 10px;
+                    }
+                    .no-print {
+                        display: none;
+                    }
+                    table {
+                        page-break-inside: avoid;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>Productos Seleccionados</h2>
+                <div class="info-fecha">
+                    <strong>Fecha:</strong> ${fecha} <br>
+                    <strong>Hora:</strong> ${hora}
+                </div>
+            </div>
+            
+            <div class="info-cliente">
+                <p><strong>Cliente:</strong> ${nombre}</p>
+                <p><strong>Cédula:</strong> ${cedula}</p>
+                <p><strong>Descripción:</strong> ${descripcion || 'Sin descripción'}</p>
+            </div>
+            
+            ${tabla}
+            
+            <div class="totales">
+                <p>Subtotal: $${subtotal}</p>
+                <p>Comisiones: $${comisiones}</p>
+                <p>IVA: $${iva}</p>
+                <p class="total-final">Total: $${total}</p>
+            </div>
+            
+            <script>
+                window.print();
+                window.onafterprint = function() { 
+                    setTimeout(() => {
+                        window.close();
+                    }, 500);
+                }
+                
+                // También cerrar con Escape
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        window.close();
+                    }
+                });
+            <\/script>
+        </body>
+        </html>
+    `);
+    ventana.document.close();
+}
+
+/* ============================================================
+   FUNCIÓN PARA MANEJAR TAB VERTICAL (MOVIMIENTO HACIA ABAJO)
+============================================================ */
+document.addEventListener('DOMContentLoaded', function() {
+    const tabla = document.getElementById('tabla_productos');
+    
+    // Enfocar el primer campo de precio al cargar
+    setTimeout(() => {
+        const primerPrecio = tabla.querySelector('.precio');
+        if (primerPrecio) primerPrecio.focus();
+    }, 100);
+
+    // Manejar el Tab para moverse verticalmente (hacia abajo)
+    tabla.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            
+            const elementoActual = document.activeElement;
+            const filaActual = elementoActual.closest('tr');
+            const filas = Array.from(tabla.querySelectorAll('tbody tr'));
+            const indiceFilaActual = filas.indexOf(filaActual);
+            
+            // Si estamos en la última fila, crear nueva fila
+            if (indiceFilaActual === filas.length - 1) {
+                const nuevaFila = agregarFila();
+                
+                // Enfocar el mismo tipo de campo en la nueva fila
+                setTimeout(() => {
+                    const nuevoCampo = nuevaFila.querySelector('.precio');
+                    if (nuevoCampo) nuevoCampo.focus();
+                }, 50);
+            } 
+            // Si hay fila debajo, moverse a ella en la MISMA columna
+            else if (indiceFilaActual < filas.length - 1) {
+                const siguienteFila = filas[indiceFilaActual + 1];
+                
+                // Determinar qué tipo de campo estamos
+                let selectorCampo = '.precio'; // Por defecto, mover al precio
+                
+                if (elementoActual.classList.contains('select-producto')) {
+                    selectorCampo = '.select-producto';
+                } else if (elementoActual.classList.contains('comision')) {
+                    selectorCampo = '.comision';
+                } else if (elementoActual.classList.contains('form-select') && 
+                          !elementoActual.classList.contains('select-producto')) {
+                    // Es el select de plataforma
+                    selectorCampo = '.form-select:not(.select-producto)';
+                } else if (elementoActual.classList.contains('total_producto')) {
+                    selectorCampo = '.total_producto';
+                } else if (elementoActual.classList.contains('btn-danger')) {
+                    selectorCampo = '.btn-danger';
+                }
+                
+                const siguienteCampo = siguienteFila.querySelector(selectorCampo);
+                if (siguienteCampo) {
+                    siguienteCampo.focus();
+                } else {
+                    // Si no encuentra el mismo tipo de campo, ir al precio
+                    const precioSiguiente = siguienteFila.querySelector('.precio');
+                    if (precioSiguiente) precioSiguiente.focus();
+                }
+            }
+        }
+    });
+
+    // Manejar Shift+Tab para moverse hacia arriba
+    tabla.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab' && e.shiftKey) {
+            e.preventDefault();
+            
+            const elementoActual = document.activeElement;
+            const filaActual = elementoActual.closest('tr');
+            const filas = Array.from(tabla.querySelectorAll('tbody tr'));
+            const indiceFilaActual = filas.indexOf(filaActual);
+            
+            // Si estamos en una fila que no es la primera, moverse hacia arriba
+            if (indiceFilaActual > 0) {
+                const filaAnterior = filas[indiceFilaActual - 1];
+                
+                // Determinar qué tipo de campo estamos
+                let selectorCampo = '.precio'; // Por defecto, mover al precio
+                
+                if (elementoActual.classList.contains('select-producto')) {
+                    selectorCampo = '.select-producto';
+                } else if (elementoActual.classList.contains('comision')) {
+                    selectorCampo = '.comision';
+                } else if (elementoActual.classList.contains('form-select') && 
+                          !elementoActual.classList.contains('select-producto')) {
+                    // Es el select de plataforma
+                    selectorCampo = '.form-select:not(.select-producto)';
+                } else if (elementoActual.classList.contains('total_producto')) {
+                    selectorCampo = '.total_producto';
+                }
+                
+                const campoAnterior = filaAnterior.querySelector(selectorCampo);
+                if (campoAnterior) {
+                    campoAnterior.focus();
+                } else {
+                    // Si no encuentra el mismo tipo de campo, ir al precio
+                    const precioAnterior = filaAnterior.querySelector('.precio');
+                    if (precioAnterior) precioAnterior.focus();
+                }
+            }
+        }
+    });
+
+    // Evento para cuando se selecciona producto en cualquier fila
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('select-producto') && e.target.value !== "") {
+            // Agregar nueva fila cuando se selecciona un producto
+            setTimeout(() => {
+                agregarFila();
+            }, 100);
+        }
+    });
+});
+
+</script>
+
+{% endblock %}

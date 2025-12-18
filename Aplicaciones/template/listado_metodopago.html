@@ -1,0 +1,106 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block title %}Métodos de Pago{% endblock %}
+
+{% block contenido %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+            <h6 class="text-primary">Métodos de Pago</h6>
+            <h1 class="mb-4">Lista de Métodos de Pago</h1>
+        </div>
+
+        <div class="mb-4">
+            <a href="{% url 'nuevo_metodopago' %}" class="btn btn-primary">
+                <i class="fa fa-plus me-2"></i>Nuevo Método de Pago
+            </a>
+            <a href="{% url 'index' %}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left me-2"></i>Volver al Inicio
+            </a>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover" id="tbl_metodos_pago">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>ID</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for metodo in metodospago %}
+                            <tr>
+                                <td>{{ metodo.id }}</td>
+                                <td>{{ metodo.descripcion }}</td>
+                                <td>
+                                    {% if metodo.estado == 'Activo' %}
+                                        <span class="badge bg-success">{{ metodo.estado }}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">{{ metodo.estado }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ metodo.fecha|date:"d/m/Y" }}</td>
+                                <td class="text-nowrap">
+                                    <a href="{% url 'editar_metodopago' metodo.id %}" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'eliminar_metodopago' metodo.id %}" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('¿Está seguro de eliminar este método de pago?');">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#tbl_metodos_pago').DataTable({
+            responsive: true,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                { extend: 'copyHtml5', text: 'Copiar', className: 'btn btn-secondary btn-sm' },
+                { extend: 'csvHtml5', text: 'CSV', className: 'btn btn-info btn-sm' },
+                { extend: 'excelHtml5', text: 'Excel', className: 'btn btn-success btn-sm' },
+                { extend: 'pdfHtml5', text: 'PDF', className: 'btn btn-danger btn-sm' },
+                { extend: 'print', text: 'Imprimir', className: 'btn btn-dark btn-sm' }
+            ],
+            pageLength: 25,
+            order: [[0, 'desc']]
+        });
+    });
+</script>
+{% endblock %}

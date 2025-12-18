@@ -1,0 +1,66 @@
+{% extends "plantilla.html" %}
+{% block contenido %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <h1 class="mb-4">Listado de Reembolsos / Movimientos Caja</h1>
+
+        <!-- Botones de acción -->
+        <div class="mb-3">
+            <a href="{% url 'nuevo_movimiento' 'Reembolso' %}" class="btn btn-danger me-2">Nuevo Reembolso</a>
+            <a href="{% url 'nuevo_movimiento' 'Transferencia' %}" class="btn btn-primary me-2">Nueva Transferencia</a>
+            <a href="{% url 'nuevo_movimiento' 'Deposito' %}" class="btn btn-success">Nuevo Depósito</a>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body table-responsive">
+                <table class="table table-bordered table-striped table-hover text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Monto</th>
+                            <th>Motivo / Detalle</th>
+                            <th>Sucursal</th>
+                            <th>Caja</th>
+                            <th>Cierre Caja</th>
+                            <th>Saldo Anterior</th>
+                            <th>Saldo Actual</th>
+                            <th>Imagen</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in movimientos %}
+                        <tr>
+                            <td>{{ r.id }}</td>
+                            <td>{{ r.tipo }}</td>
+                            <td class="text-end">${{ r.monto|floatformat:2 }}</td>
+                            <td>{{ r.motivo|default:"-" }}</td>
+                            <td>{{ r.sucursal.nombre|default:"-" }}</td>
+                            <td>{{ r.caja.nombre|default:"-" }}</td>
+                            <td>{{ r.cierre_caja.id|default:"-" }}</td>
+                            <td class="text-end">${{ r.saldo_anterior|default:"0.00" }}</td>
+                            <td class="text-end">${{ r.saldo_actual|default:"0.00" }}</td>
+                            <td>
+                                {% if r.imagen %}
+                                    <a href="{{ r.imagen.url }}" target="_blank">Ver</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ r.fecha|date:"d/m/Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="11" class="text-center text-muted">No hay movimientos registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

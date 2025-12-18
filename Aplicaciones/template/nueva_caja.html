@@ -1,0 +1,99 @@
+{% extends "./plantilla.html" %}
+
+{% block extra_css %}
+<style>
+    /* Contenedor del formulario */
+    .form-container {
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    .form-container:hover {
+        box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+    }
+
+    /* Título */
+    .form-container h3 {
+        font-weight: 600;
+        color: #0d6efd;
+        margin-bottom: 2rem;
+    }
+
+    /* Labels */
+    .form-container label {
+        font-weight: 500;
+        margin-top: 1rem;
+    }
+
+    /* Inputs y selects */
+    .form-control {
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        transition: border-color 0.3s;
+    }
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* Botones */
+    .btn-custom {
+        border-radius: 0.5rem;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Contenedor de botones */
+    .form-actions {
+        text-align: center;
+        margin-top: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="form-container shadow-sm">
+            <form action="{% url 'nueva_caja' %}" id="frm_caja" method="post">
+                <h3 class="text-center">Agregar Nueva Caja</h3>
+                {% csrf_token %}
+
+                <label for="txt_nombre">Nombre de la Caja</label>
+                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" placeholder="Ingrese el nombre de la caja" required>
+
+                <label for="select_sucursal">Sucursal</label>
+                <select class="form-control" name="select_sucursal" id="select_sucursal" required>
+                    <option value="">-- Seleccione Sucursal --</option>
+                    {% for sucursal in sucursales %}
+                        <option value="{{ sucursal.id }}">{{ sucursal.nombre }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="select_estado">Estado</label>
+                <select class="form-control" name="select_estado" id="select_estado">
+                    <option value="Activo" selected>Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success btn-custom me-2">
+                        <i class="fa fa-check me-1"></i> Guardar
+                    </button>
+                    <a href="{% url 'listado_cajas' %}" class="btn btn-danger btn-custom">
+                        <i class="fa fa-times me-1"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

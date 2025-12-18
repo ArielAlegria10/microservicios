@@ -1,0 +1,117 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-container shadow p-4">
+            <form action="{% url 'nuevo_reembolso' %}" id="frm_nuevo_reembolso" method="post" enctype="multipart/form-data">
+                <h3 class="text-center mb-4">Registrar Nuevo Movimiento</h3>
+                {% csrf_token %}
+
+                <!-- Tipo de Movimiento -->
+                <div class="mb-3">
+                    <label for="tipo"><b>Tipo:</b></label>
+                    <select class="form-control" name="tipo" id="tipo" required>
+                        <option value="">-- Seleccione --</option>
+                        <option value="reembolso">Reembolso</option>
+                        <option value="transferencia">Transferencia</option>
+                    </select>
+                </div>
+
+                <!-- Campo exclusivo para Transferencias -->
+                <div class="mb-3" id="campo_transferencia" style="display:none;">
+                    <label for="numero_transferencia"><b>Número de Transferencia:</b></label>
+                    <input type="text" class="form-control" name="numero_transferencia" id="numero_transferencia">
+                </div>
+
+                <!-- Monto -->
+                <div class="mb-3">
+                    <label for="monto"><b>Monto:</b></label>
+                    <input type="number" step="0.01" class="form-control" name="monto" id="monto" min="0" required>
+                </div>
+
+                <!-- Motivo -->
+                <div class="mb-3">
+                    <label for="motivo"><b>Motivo:</b></label>
+                    <textarea class="form-control" name="motivo" id="motivo" rows="3"></textarea>
+                </div>
+
+                <!-- Imagen opcional -->
+                <div class="mb-3">
+                    <label for="imagen"><b>Imagen:</b></label>
+                    <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*">
+                </div>
+
+                <!-- Sucursal -->
+                <div class="mb-3">
+                    <label for="sucursal"><b>Sucursal:</b></label>
+                    <select class="form-control" name="sucursal" id="sucursal">
+                        <option value="">-- Seleccione Sucursal --</option>
+                        {% for s in sucursales %}
+                            <option value="{{ s.id }}">{{ s.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Caja -->
+                <div class="mb-3">
+                    <label for="caja"><b>Caja:</b></label>
+                    <select class="form-control" name="caja" id="caja">
+                        <option value="">-- Seleccione Caja --</option>
+                        {% for c in cajas %}
+                            <option value="{{ c.id }}">{{ c.nombre }} - {{ c.sucursal.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Fecha -->
+                <div class="mb-3">
+                    <label for="fecha"><b>Fecha:</b></label>
+                    <input type="date" class="form-control" name="fecha" id="fecha" readonly value="{{ fecha_hoy|default:'' }}">
+                </div>
+
+                <center>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="{% url 'listado_reembolsos' %}" class="btn btn-danger">Cancelar</a>
+                </center>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const montoInput = document.getElementById("monto");
+    const tipoMovimiento = document.getElementById("tipo");
+    const campoTransferencia = document.getElementById("campo_transferencia");
+
+    // Mostrar el campo transferencia solo si se selecciona "transferencia"
+    tipoMovimiento.addEventListener("change", function() {
+        if (this.value === "transferencia") {
+            campoTransferencia.style.display = "block";
+            document.getElementById("numero_transferencia").required = true;
+        } else {
+            campoTransferencia.style.display = "none";
+            document.getElementById("numero_transferencia").required = false;
+        }
+    });
+
+    // Evitar monto negativo
+    montoInput.addEventListener("input", function() {
+        if (parseFloat(montoInput.value) < 0) {
+            montoInput.value = 0;
+        }
+    });
+
+    // Autocompletar fecha hoy si está vacía
+    const fechaInput = document.getElementById("fecha");
+    if (!fechaInput.value) {
+        const hoy = new Date().toISOString().split('T')[0];
+        fechaInput.value = hoy;
+    }
+});
+</script>
+
+{% endblock %}

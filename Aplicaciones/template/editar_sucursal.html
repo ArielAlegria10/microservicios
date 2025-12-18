@@ -1,0 +1,47 @@
+{% extends "plantilla.html" %}
+{% block contenido %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <form action="{% url 'editar_sucursal' sucursal.id %}" method="post">
+                            {% csrf_token %}
+                            <h3 class="text-center mb-4 text-warning">
+                                <i class="fa fa-edit me-2"></i>Editar Sucursal
+                            </h3>
+
+                            <div class="mb-3">
+                                <label for="txt_id" class="form-label"><b>ID:</b></label>
+                                <input type="text" class="form-control" name="id" id="txt_id" value="{{ sucursal.id }}" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="txt_nombre" class="form-label"><b>Nombre:</b></label>
+                                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" value="{{ sucursal.nombre }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="txt_direccion" class="form-label"><b>Dirección:</b></label>
+                                <textarea class="form-control" name="txt_direccion" id="txt_direccion" rows="3" required>{{ sucursal.direccion }}</textarea>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-warning btn-lg px-5">
+                                    <i class="fa fa-save me-2"></i>Guardar Cambios
+                                </button>
+                                <a href="{% url 'listado_sucursales' %}" class="btn btn-danger btn-lg px-5">
+                                    <i class="fa fa-times me-2"></i>Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

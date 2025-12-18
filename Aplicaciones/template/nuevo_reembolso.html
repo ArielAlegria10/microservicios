@@ -1,0 +1,116 @@
+{% extends "plantilla.html" %}
+{% block contenido %}
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-container shadow p-4">
+            <h3 class="text-center mb-4">
+                {% if tipo %}Registrar Nuevo {{ tipo }}{% else %}Registrar Movimiento{% endif %}
+            </h3>
+
+            <form action="" id="frm_nuevo_reembolso" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Monto -->
+                <div class="mb-3">
+                    <label for="monto"><b>Monto:</b></label>
+                    <input type="number" step="0.01" class="form-control" name="monto" id="monto" min="0.01" required>
+                </div>
+
+                <!-- Motivo -->
+                <div class="mb-3">
+                    <label for="motivo"><b>Motivo / Detalle:</b></label>
+                    <textarea class="form-control" name="motivo" id="motivo" rows="3" placeholder="Ingrese el motivo"></textarea>
+                </div>
+
+                <!-- Imagen opcional -->
+                <div class="mb-3">
+                    <label for="imagen"><b>Imagen (opcional):</b></label>
+                    <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*">
+                </div>
+
+                <!-- Sucursal -->
+                <div class="mb-3">
+                    <label for="sucursal"><b>Sucursal:</b></label>
+                    <select class="form-control" name="sucursal" id="sucursal">
+                        <option value="">-- Seleccione Sucursal --</option>
+                        {% for s in sucursales %}
+                            <option value="{{ s.id }}">{{ s.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Caja -->
+                <div class="mb-3">
+                    <label for="caja"><b>Caja:</b></label>
+                    <select class="form-control" name="caja" id="caja">
+                        <option value="">-- Seleccione Caja --</option>
+                        {% for c in cajas %}
+                            <option value="{{ c.id }}" data-sucursal="{{ c.sucursal.id }}">{{ c.nombre }} - {{ c.sucursal.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Cierre Caja -->
+                <div class="mb-3">
+                    <label for="cierre_caja"><b>Cierre Caja:</b></label>
+                    <select class="form-control" name="cierre_caja" id="cierre_caja">
+                        <option value="">-- Seleccione Cierre --</option>
+                        {% for cierre in cierres %}
+                            <option value="{{ cierre.id }}">Cierre #{{ cierre.id }} - {{ cierre.fecha|date:"d/m/Y" }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Fecha -->
+                <div class="mb-3">
+                    <label for="fecha"><b>Fecha:</b></label>
+                    <input type="date" class="form-control" name="fecha" id="fecha" readonly>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Guardar {{ tipo }}</button>
+                    <a href="{% url 'listado_reembolsos' %}" class="btn btn-danger">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const montoInput = document.getElementById("monto");
+    const fechaInput = document.getElementById("fecha");
+    const sucursalSelect = document.getElementById("sucursal");
+    const cajaSelect = document.getElementById("caja");
+
+    // Evitar monto negativo
+    montoInput.addEventListener("input", function() {
+        if (parseFloat(montoInput.value) < 0) {
+            montoInput.value = 0;
+        }
+    });
+
+    // Autocompletar fecha hoy
+    const hoy = new Date().toISOString().split('T')[0];
+    fechaInput.value = hoy;
+
+    // Filtrar cajas según sucursal seleccionada
+    sucursalSelect.addEventListener("change", function() {
+        const sucursalId = this.value;
+        for (let option of cajaSelect.options) {
+            if (option.value === "") continue;
+            if (option.dataset.sucursal === sucursalId) {
+                option.style.display = "block";
+            } else {
+                option.style.display = "none";
+            }
+        }
+        cajaSelect.value = ""; // resetear selección
+    });
+});
+</script>
+
+{% endblock %}

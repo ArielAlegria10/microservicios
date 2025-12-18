@@ -1,0 +1,792 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-md-12">
+        <div class="form-container shadow">
+
+            <form action="{% url 'editar_venta' venta.id %}" id="frm_editar_venta" method="post">
+                <h4 class="text-center mb-2 fw-bold">Editar Venta #{{ venta.id }}</h4>
+                <p class="text-center text-muted mb-3">
+                    Fecha de creación: {{ venta.fecha|date:"d/m/Y H:i" }}
+                </p>
+                {% csrf_token %}
+
+                <!-- Campos del Cliente -->
+                <div class="row mb-2">
+                    <div class="col-md-5">
+                        <label for="txt_cedula" class="form-label fw-semibold">Cédula:</label>
+                        <input type="text" class="form-control form-control-sm" name="txt_cedula" id="txt_cedula" 
+                               value="{{ venta.cedula|default:'' }}" required>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="txt_nombre" class="form-label fw-semibold">Nombre:</label>
+                        <input type="text" class="form-control form-control-sm" name="txt_nombre" id="txt_nombre" 
+                               value="{{ venta.nombre|default:'' }}" required>
+                    </div>
+                </div>
+
+                <!-- Tabla de Productos -->
+                <div class="table-responsive mb-2">
+                    <table class="table table-bordered align-middle table-sm" id="tabla_productos">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th style="display:none;">Cantidad</th>
+                                <th>Precio</th>
+                                <th>Comisión</th>
+                                <th>Plataforma</th>
+                                <th>Total</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_productos">
+                            {% for detalle in venta.detalles.all %}
+                            <tr>
+                                <td>
+                                    <select class="form-select form-select-sm select-producto" name="productos[{{ forloop.counter0 }}][nombre]" required>
+                                        <option value="">-- Seleccione un producto --</option>
+                                        <!-- Lista completa de productos -->
+                                        <option value="AGUA - SANTA ISABEL EMAPASI" {% if detalle.producto == "AGUA - SANTA ISABEL EMAPASI" %}selected{% endif %}>AGUA - SANTA ISABEL EMAPASI</option>
+                                        <option value="ANT - RENOVACION DE MATRICULA" {% if detalle.producto == "ANT - RENOVACION DE MATRICULA" %}selected{% endif %}>ANT - RENOVACION DE MATRICULA</option>
+                                        <option value="Banco Del Pacífico - Retiros" {% if detalle.producto == "Banco Del Pacífico - Retiros" %}selected{% endif %}>Banco Del Pacífico - Retiros</option>
+                                        <option value="CITACIONES - INFRACCIONES" {% if detalle.producto == "CITACIONES - INFRACCIONES" %}selected{% endif %}>CITACIONES - INFRACCIONES</option>
+                                        <option value="copias 0,50" {% if detalle.producto == "copias 0,50" %}selected{% endif %}>copias 0,50</option>
+                                        <option value="copias 1,00" {% if detalle.producto == "copias 1,00" %}selected{% endif %}>copias 1,00</option>
+                                        <option value="MOVILIDAD COTOPAXI - RODAJE" {% if detalle.producto == "MOVILIDAD COTOPAXI - RODAJE" %}selected{% endif %}>MOVILIDAD COTOPAXI - RODAJE</option>
+                                        <option value="ORDEN DE PAGO" {% if detalle.producto == "ORDEN DE PAGO" %}selected{% endif %}>ORDEN DE PAGO</option>
+                                        <option value="OTROS PAGOS PUJILI" {% if detalle.producto == "OTROS PAGOS PUJILI" %}selected{% endif %}>OTROS PAGOS PUJILI</option>
+                                        <option value="PRUEBA COTOPAXI IMP RODAJE" {% if detalle.producto == "PRUEBA COTOPAXI IMP RODAJE" %}selected{% endif %}>PRUEBA COTOPAXI IMP RODAJE</option>
+                                        <option value="SRI - MATRICULACION VEHICULAR" {% if detalle.producto == "SRI - MATRICULACION VEHICULAR" %}selected{% endif %}>SRI - MATRICULACION VEHICULAR</option>
+                                        <option value="TASA REVISIÓN PUJILÍ" {% if detalle.producto == "TASA REVISIÓN PUJILÍ" %}selected{% endif %}>TASA REVISIÓN PUJILÍ</option>
+                                        <option value="TURNOS" {% if detalle.producto == "TURNOS" %}selected{% endif %}>TURNOS</option>
+                                        <option value="DEPOSITOS COOPERATIVA ATUNTAQUI" {% if detalle.producto == "DEPOSITOS COOPERATIVA ATUNTAQUI" %}selected{% endif %}>DEPOSITOS COOPERATIVA ATUNTAQUI</option>
+                                        <option value="MULTAS CNE - CONSEJO NACIONAL ELECTORAL" {% if detalle.producto == "MULTAS CNE - CONSEJO NACIONAL ELECTORAL" %}selected{% endif %}>MULTAS CNE - CONSEJO NACIONAL ELECTORAL</option>
+                                        <option value="MUNICIPIO DE GUAYAQUIL - PREDIOS" {% if detalle.producto == "MUNICIPIO DE GUAYAQUIL - PREDIOS" %}selected{% endif %}>MUNICIPIO DE GUAYAQUIL - PREDIOS</option>
+                                        <option value="** MUNICIPIO DE ANTONIO ANTE - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE ANTONIO ANTE - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE ANTONIO ANTE - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE LATACUNGA - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE LATACUNGA - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE LATACUNGA - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE MACHALA - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE MACHALA - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE MACHALA - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE MONTECRISTI - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE MONTECRISTI - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE MONTECRISTI - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE MONTUFAR - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE MONTUFAR - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE MONTUFAR - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE PASAJE - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE PASAJE - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE PASAJE - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE PELILEO - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE PELILEO - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE PELILEO - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE PILLARO - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE PILLARO - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE PILLARO - PREDIO URBANO</option>
+                                        <option value="** MUNICIPIO DE TULCAN - PREDIO URBANO" {% if detalle.producto == "** MUNICIPIO DE TULCAN - PREDIO URBANO" %}selected{% endif %}>** MUNICIPIO DE TULCAN - PREDIO URBANO</option>
+                                        <!-- ... (Aquí deberías copiar TODAS las opciones del template de nueva venta) ... -->
+                                        <option value="COMISION variable" {% if detalle.producto == "COMISION variable" %}selected{% endif %}>COMISION variable</option>
+                                        <option value="COMISION 0,50" {% if detalle.producto == "COMISION 0,50" %}selected{% endif %}>COMISION 0,50</option>
+                                        <option value="COMISION 0,75" {% if detalle.producto == "COMISION 0,75" %}selected{% endif %}>COMISION 0,75</option>
+                                        <option value="COMISION 1" {% if detalle.producto == "COMISION 1" %}selected{% endif %}>COMISION 1</option>
+                                        <option value="COMISION 2" {% if detalle.producto == "COMISION 2" %}selected{% endif %}>COMISION 2</option>
+                                        <option value="COMISION 3" {% if detalle.producto == "COMISION 3" %}selected{% endif %}>COMISION 3</option>
+                                        <option value="COMISION 4" {% if detalle.producto == "COMISION 4" %}selected{% endif %}>COMISION 4</option>
+                                        <option value="COMISION 5" {% if detalle.producto == "COMISION 5" %}selected{% endif %}>COMISION 5</option>
+                                        <option value="COMISION 6" {% if detalle.producto == "COMISION 6" %}selected{% endif %}>COMISION 6</option>
+                                        <option value="COMISION 7" {% if detalle.producto == "COMISION 7" %}selected{% endif %}>COMISION 7</option>
+                                        <option value="COMISION 8" {% if detalle.producto == "COMISION 8" %}selected{% endif %}>COMISION 8</option>
+                                        <option value="COMISION 9" {% if detalle.producto == "COMISION 9" %}selected{% endif %}>COMISION 9</option>
+                                        <option value="COMISION 10" {% if detalle.producto == "COMISION 10" %}selected{% endif %}>COMISION 10</option>
+                                        <option value="Impresiones 0,10" {% if detalle.producto == "Impresiones 0,10" %}selected{% endif %}>Impresiones 0,10</option>
+                                        <option value="Impresiones 0,25" {% if detalle.producto == "Impresiones 0,25" %}selected{% endif %}>Impresiones 0,25</option>
+                                        <option value="Impresiones 0,50" {% if detalle.producto == "Impresiones 0,50" %}selected{% endif %}>Impresiones 0,50</option>
+                                        <option value="Impresiones 0,75" {% if detalle.producto == "Impresiones 0,75" %}selected{% endif %}>Impresiones 0,75</option>
+                                        <option value="Impresiones 1,00" {% if detalle.producto == "Impresiones 1,00" %}selected{% endif %}>Impresiones 1,00</option>
+                                        <option value="copias 0,10" {% if detalle.producto == "copias 0,10" %}selected{% endif %}>copias 0,10</option>
+                                        <option value="copias 0,25" {% if detalle.producto == "copias 0,25" %}selected{% endif %}>copias 0,25</option>
+                                        <option value="copias 0,75" {% if detalle.producto == "copias 0,75" %}selected{% endif %}>copias 0,75</option>
+                                        <option value="Oficios 1,00" {% if detalle.producto == "Oficios 1,00" %}selected{% endif %}>Oficios 1,00</option>
+                                        <option value="Oficios 1,50" {% if detalle.producto == "Oficios 1,50" %}selected{% endif %}>Oficios 1,50</option>
+                                        <option value="Oficios 2,00" {% if detalle.producto == "Oficios 2,00" %}selected{% endif %}>Oficios 2,00</option>
+                                        <option value="Emplasticados 0,25" {% if detalle.producto == "Emplasticados 0,25" %}selected{% endif %}>Emplasticados 0,25</option>
+                                        <option value="Emplasticados 0,50" {% if detalle.producto == "Emplasticados 0,50" %}selected{% endif %}>Emplasticados 0,50</option>
+                                        <option value="Emplasticados 0,75" {% if detalle.producto == "Emplasticados 0,75" %}selected{% endif %}>Emplasticados 0,75</option>
+                                        <option value="Emplasticados 1,00" {% if detalle.producto == "Emplasticados 1,00" %}selected{% endif %}>Emplasticados 1,00</option>
+                                        <option value="Emplasticados 2,00" {% if detalle.producto == "Emplasticados 2,00" %}selected{% endif %}>Emplasticados 2,00</option>
+                                        <option value="Inventario" {% if detalle.producto == "Inventario" %}selected{% endif %}>Inventario</option>
+                                        <option value="Especies Valoradas" {% if detalle.producto == "Especies Valoradas" %}selected{% endif %}>Especies Valoradas</option>
+                                        <option value="Carpetas Carton azul" {% if detalle.producto == "Carpetas Carton azul" %}selected{% endif %}>Carpetas Carton azul</option>
+                                        <option value="Carpetas Carton Mostaza" {% if detalle.producto == "Carpetas Carton Mostaza" %}selected{% endif %}>Carpetas Carton Mostaza</option>
+                                        <option value="Carpetas Carton Amarillo" {% if detalle.producto == "Carpetas Carton Amarillo" %}selected{% endif %}>Carpetas Carton Amarillo</option>
+                                        <option value="Carpetas Carton Verde" {% if detalle.producto == "Carpetas Carton Verde" %}selected{% endif %}>Carpetas Carton Verde</option>
+                                        <option value="Sobres manila B1" {% if detalle.producto == "Sobres manila B1" %}selected{% endif %}>Sobres manila B1</option>
+                                        <option value="Sobres manila B2" {% if detalle.producto == "Sobres manila B2" %}selected{% endif %}>Sobres manila B2</option>
+                                        <option value="Sobres manila B3" {% if detalle.producto == "Sobres manila B3" %}selected{% endif %}>Sobres manila B3</option>
+                                        <option value="Sobres manila B4" {% if detalle.producto == "Sobres manila B4" %}selected{% endif %}>Sobres manila B4</option>
+                                        <option value="Kit seguridad Negro Kia" {% if detalle.producto == "Kit seguridad Negro Kia" %}selected{% endif %}>Kit seguridad Negro Kia</option>
+                                        <option value="Kit seguridad Rojo 2lt" {% if detalle.producto == "Kit seguridad Rojo 2lt" %}selected{% endif %}>Kit seguridad Rojo 2lt</option>
+                                        <option value="Kit seguridad Rojo 5lt" {% if detalle.producto == "Kit seguridad Rojo 5lt" %}selected{% endif %}>Kit seguridad Rojo 5lt</option>
+                                        <option value="Kit seguridad Rojo 10lt" {% if detalle.producto == "Kit seguridad Rojo 10lt" %}selected{% endif %}>Kit seguridad Rojo 10lt</option>
+                                        <option value="Extintor 2lb" {% if detalle.producto == "Extintor 2lb" %}selected{% endif %}>Extintor 2lb</option>
+                                        <option value="Extintor 5lb" {% if detalle.producto == "Extintor 5lb" %}selected{% endif %}>Extintor 5lb</option>
+                                        <option value="Extintor 10lb" {% if detalle.producto == "Extintor 10lb" %}selected{% endif %}>Extintor 10lb</option>
+                                    </select>
+                                </td>
+                                <td style="display:none;">
+                                    <input type="number" class="form-control cantidad" name="productos[{{ forloop.counter0 }}][cantidad]" 
+                                           value="{{ detalle.cantidad|default:'1' }}" min="1" readonly>
+                                </td>
+                                <td>
+                                    <input type="number" step="0.01" class="form-control precio" name="productos[{{ forloop.counter0 }}][precio]" 
+                                           value="{{ detalle.precio|default:'0' }}" min="0" required>
+                                </td>
+                                <td>
+                                    <input type="number" step="0.01" class="form-control comision" name="productos[{{ forloop.counter0 }}][comision]" 
+                                           value="{{ detalle.comision|default:'0' }}" readonly>
+                                </td>
+                                <td>
+                                    <select class="form-select" name="productos[{{ forloop.counter0 }}][plataforma]">
+                                        <option value="">-- Plataforma --</option>
+                                        <option value="ZN" {% if detalle.plataforma == "ZN" %}selected{% endif %}>ZN</option>
+                                        <option value="CXP" {% if detalle.plataforma == "CXP" %}selected{% endif %}>CXP</option>
+                                        <option value="CNB_117" {% if detalle.plataforma == "CNB_117" %}selected{% endif %}>CNB_117</option>
+                                        <option value="CNB_111" {% if detalle.plataforma == "CNB_111" %}selected{% endif %}>CNB_111</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" step="0.01" class="form-control total_producto" 
+                                           name="productos[{{ forloop.counter0 }}][total_producto]" 
+                                           value="{{ detalle.total|default:'0' }}" readonly>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">🗑️</button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <!-- Fila base cuando no hay detalles -->
+                            <tr class="fila_base">
+                                <td>
+                                    <select class="form-select form-select-sm select-producto" name="productos[0][nombre]" required>
+                                        <option value="">-- Seleccione un producto --</option>
+                                        <!-- Aquí deberías copiar TODAS las opciones del template de nueva venta -->
+                                    </select>
+                                </td>
+                                <td style="display:none;">
+                                    <input type="number" class="form-control cantidad" name="productos[0][cantidad]" value="1" min="1" readonly>
+                                </td>
+                                <td><input type="number" step="0.01" class="form-control precio" name="productos[0][precio]" min="0" required></td>
+                                <td><input type="number" step="0.01" class="form-control comision" name="productos[0][comision]" readonly></td>
+                                <td>
+                                    <select class="form-select" name="productos[0][plataforma]">
+                                        <option value="">-- Plataforma --</option>
+                                        <option value="ZN">ZN</option>
+                                        <option value="CXP">CXP</option>
+                                        <option value="CNB_117">CNB_117</option>
+                                        <option value="CNB_111">CNB_111</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" step="0.01" class="form-control total_producto" name="productos[0][total_producto]" readonly></td>
+                                <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">🗑️</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Botón Agregar Producto y Imprimir -->
+                <div class="mb-2 d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="agregarFila()">+ Agregar Producto</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="imprimirProductos()">🖨️ Imprimir Productos</button>
+                </div>
+
+                <!-- Totales -->
+                <div class="row mb-2 align-items-start">
+                    <!-- Descripción -->
+                    <div class="col-md-6">
+                        <label for="txt_descripcion" class="form-label fw-semibold">Descripción:</label>
+                        <textarea class="form-control form-control-sm" name="txt_descripcion" id="txt_descripcion" rows="5">{{ venta.descripcion|default:'' }}</textarea>
+                    </div>
+
+                    <!-- Totales -->
+                    <div class="col-md-6 text-end">
+                        <small style="display:none;">Comisiones: $<span id="total_comisiones">{{ venta.comision_total|default:'0.00' }}</span></small><br>
+                        <small style="display:none;">IVA: $<span id="total_iva">{{ venta.total_iva_detalles|default:'0.00' }}</span></small><br>
+                        <small>Subtotal: $<span id="subtotal_compra">{{ venta.subtotal|default:'0.00' }}</span></small><br>
+                        <strong>Total: $<span id="total_compra">{{ venta.total_con_comision|default:'0.00' }}</span></strong><br>
+                        <strong class="text-success" id="lbl_vuelto">Vuelto: ${{ venta.vuelto|default:'0.00' }}</strong>
+                    </div>
+                </div>
+
+                <!-- Formas de pago -->
+               <!-- Formas de pago -->
+<div class="mb-2">
+    <label class="form-label fw-semibold">Formas de Pago:</label>
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Método</th>
+                    <th>Monto</th>
+                    <th>Banco / Cuenta / Comprobante</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for metodo in metodos_pago %}
+                <tr>
+                    <td>{{ metodo.descripcion }}</td>
+                    <td>
+                        <input type="number" step="0.01" min="0" class="form-control monto_pago" 
+                               name="pagos[{{ metodo.id }}][monto]" 
+                               value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.monto_pagado }}{% endif %}{% endfor %}">
+                    </td>
+                    <td>
+                        <div class="transferencia_campos" style="display:none;">
+                            <input type="text" class="form-control form-control-sm mb-1" 
+                                   placeholder="Banco" name="pagos[{{ metodo.id }}][banco]"
+                                   value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.banco|default:'' }}{% endif %}">
+                            <input type="text" class="form-control form-control-sm mb-1" 
+                                   placeholder="Cuenta" name="pagos[{{ metodo.id }}][cuenta]"
+                                   value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.cuenta|default:'' }}{% endif %}">
+                            <input type="text" class="form-control form-control-sm" 
+                                   placeholder="Comprobante" name="pagos[{{ metodo.id }}][comprobante]"
+                                   value="{% for pago in venta.pagos.all %}{% if pago.metodo.id == metodo.id %}{{ pago.comprobante|default:'' }}{% endif %}">
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                <!-- Caja y Sucursal -->
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label for="select_caja" class="form-label fw-semibold">Caja:</label>
+                        <select class="form-select form-select-sm" name="select_caja" id="select_caja" required>
+                            <option value="">-- Seleccione Caja --</option>
+                            {% for caja in cajas %}
+                                <option value="{{ caja.id }}" {% if venta.caja and venta.caja.id == caja.id %}selected{% endif %}>
+                                    {{ caja.nombre }} - {{ caja.sucursal.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="select_sucursal" class="form-label fw-semibold">Sucursal:</label>
+                        <select class="form-select form-select-sm" name="select_sucursal" id="select_sucursal" required>
+                            <option value="">-- Seleccione Sucursal --</option>
+                            {% for sucursal in sucursales %}
+                                <option value="{{ sucursal.id }}" {% if venta.sucursal and venta.sucursal.id == sucursal.id %}selected{% endif %}>
+                                    {{ sucursal.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="text-center mb-2">
+                    <button type="submit" class="btn btn-success btn-sm me-1">Guardar Cambios</button>
+                    <a href="{% url 'listado_ventas' %}" class="btn btn-danger btn-sm">Cancelar</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Estilos compactos -->
+<style>
+.form-container {
+    background: #fff;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.form-control-sm, .form-select-sm {
+    height: 26px;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+}
+
+textarea.form-control-sm {
+    height: 40px;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+    resize: vertical;
+}
+
+.table-sm th, .table-sm td {
+    padding: 2px 4px;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+h4, strong, small {
+    margin: 0;
+    padding: 0;
+}
+</style>
+
+<!-- Script JS -->
+<script>
+// Inicializar contador basado en el número de filas existentes
+let contador = document.querySelectorAll('#tbody_productos tr').length || 1;
+const IVA_PERCENT = 0.15;
+const comisiones = [
+    { desde: 0.01, hasta: 5, comision_banco: 0.6, comision_local: 0.50 },
+    { desde: 5.01, hasta: 200, comision_banco: 0.6, comision_local: 1.00 },
+    { desde: 200.01, hasta: 300, comision_banco: 0.6, comision_local: 1.50 },
+    { desde: 300.01, hasta: 400, comision_banco: 0.6, comision_local: 2.00 },
+    { desde: 400.01, hasta: 500, comision_banco: 0.6, comision_local: 2.50 },
+    { desde: 500.01, hasta: 600, comision_banco: 0.6, comision_local: 3.00 },
+    { desde: 600.01, hasta: 700, comision_banco: 0.6, comision_local: 3.50 },
+    { desde: 700.01, hasta: 800, comision_banco: 0.6, comision_local: 4.00 },
+    { desde: 800.01, hasta: 900, comision_banco: 0.6, comision_local: 4.50 },
+    { desde: 900.01, hasta: 2000, comision_banco: 0.6, comision_local: 15.00 }
+];
+
+function calcularComision(precio){
+    for(let c of comisiones){
+        if(precio >= c.desde && precio <= c.hasta) return c.comision_banco + c.comision_local;
+    }
+    return 0;
+}
+
+function calcularTotal(){
+    let subtotal = 0;
+    let suma_comision_sin_iva = 0;
+    let total_iva = 0;
+
+    document.querySelectorAll('#tbody_productos tr').forEach(fila=>{
+        const cantidad = parseFloat(fila.querySelector('[name*="[cantidad]"]').value || 1);
+        const precio = parseFloat(fila.querySelector('.precio').value || 0);
+
+        // Calculamos comisión por producto
+        const comision_producto = calcularComision(precio) * cantidad;
+
+        // Dividimos la comisión para separar IVA
+        const comision_sin_iva = comision_producto / 1.15;
+        const iva_producto = comision_producto - comision_sin_iva;
+
+        // Guardamos valores en la fila
+        if (fila.querySelector('.comision')) {
+            fila.querySelector('.comision').value = comision_sin_iva.toFixed(2);
+        }
+
+        // Sumar a totales
+        subtotal += precio * cantidad;
+        suma_comision_sin_iva += comision_sin_iva;
+        total_iva += iva_producto;
+
+        // Total por producto = precio + comisión completa (ya con IVA incluido)
+        if (fila.querySelector('.total_producto')) {
+            fila.querySelector('.total_producto').value = (precio + comision_producto).toFixed(2);
+        }
+    });
+
+    const total_compra = subtotal + suma_comision_sin_iva + total_iva;
+
+    // Actualizamos los elementos en el HTML
+    document.getElementById('subtotal_compra').textContent = subtotal.toFixed(2);
+    document.getElementById('total_comisiones').textContent = suma_comision_sin_iva.toFixed(2);
+    document.getElementById('total_iva').textContent = total_iva.toFixed(2);
+    document.getElementById('total_compra').textContent = total_compra.toFixed(2);
+
+    calcularVuelto();
+}
+
+function calcularVuelto(){
+    let total_pagos = 0;
+    document.querySelectorAll('.monto_pago').forEach(pago=>{
+        total_pagos += parseFloat(pago.value || 0);
+    });
+    const total_compra = parseFloat(document.getElementById('total_compra').textContent || 0);
+    const vuelto = total_pagos - total_compra;
+    document.getElementById('lbl_vuelto').textContent = `Vuelto: $${vuelto.toFixed(2)}`;
+}
+
+function agregarFila(){
+    const tbody = document.getElementById('tbody_productos');
+    const filas = tbody.querySelectorAll('tr');
+    const ultimaFila = filas[filas.length - 1];
+    
+    // Clonar la última fila
+    const nuevaFila = ultimaFila.cloneNode(true);
+    
+    // Actualizar los nombres de los campos
+    nuevaFila.querySelectorAll('input, select').forEach(el=>{
+        const name = el.getAttribute('name');
+        if(name) {
+            // Extraer el índice actual
+            const match = name.match(/productos\[(\d+)\]/);
+            if(match) {
+                const nuevoNombre = name.replace(/productos\[\d+\]/, `productos[${contador}]`);
+                el.setAttribute('name', nuevoNombre);
+            }
+        }
+        // Resetear valores
+        if(el.classList.contains('precio') || el.classList.contains('comision') || el.classList.contains('total_producto')) {
+            el.value = 0;
+        }
+        if(el.classList.contains('cantidad')) {
+            el.value = 1;
+        }
+        if(el.tagName === 'SELECT') {
+            if(el.classList.contains('select-producto')) {
+                el.selectedIndex = 0;
+            }
+            if(el.name && el.name.includes('plataforma')) {
+                el.selectedIndex = 0;
+            }
+        }
+    });
+
+    tbody.appendChild(nuevaFila);
+    contador++;
+
+    // Agregar event listener para el nuevo select de producto
+    nuevaFila.querySelector('.select-producto').addEventListener('change', function(){
+        if(this.value !== "") {
+            calcularTotal();
+        }
+    });
+
+    // Agregar event listener para el precio
+    nuevaFila.querySelector('.precio').addEventListener('input', calcularTotal);
+
+    calcularTotal();
+    
+    return nuevaFila;
+}
+
+function eliminarFila(boton){
+    const filas = document.querySelectorAll('#tbody_productos tr');
+    if(filas.length > 1){
+        boton.closest('tr').remove();
+        calcularTotal();
+    }
+}
+
+// Función para mostrar/ocultar campos de transferencia según el método y monto
+function actualizarCamposTransferencia() {
+    document.querySelectorAll('.monto_pago').forEach(input => {
+        const fila = input.closest('tr');
+        const metodo = fila.querySelector('td:first-child').textContent.trim().toLowerCase();
+        const campos = fila.querySelector('.transferencia_campos');
+
+        if (metodo.includes('transferencia') && parseFloat(input.value || 0) > 0) {
+            campos.style.display = 'block';
+        } else {
+            campos.style.display = 'none';
+        }
+    });
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Calcular total inicial
+    setTimeout(() => {
+        calcularTotal();
+    }, 100);
+    
+    // Configurar campos de transferencia
+    actualizarCamposTransferencia();
+    
+    // Event listeners para inputs
+    document.addEventListener('input', function(e){
+        if(e.target.classList.contains('precio') || e.target.classList.contains('cantidad') || e.target.classList.contains('monto_pago')){
+            calcularTotal();
+            if(e.target.classList.contains('monto_pago')) {
+                actualizarCamposTransferencia();
+            }
+        }
+    });
+    
+    // Event listener para selects de producto
+    document.querySelectorAll('.select-producto').forEach(select => {
+        select.addEventListener('change', function() {
+            calcularTotal();
+        });
+    });
+    
+    // Configurar manejo de Tab
+    const tabla = document.getElementById('tabla_productos');
+    
+    // Manejar el Tab para moverse verticalmente
+    tabla.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            
+            const elementoActual = document.activeElement;
+            const filaActual = elementoActual.closest('tr');
+            const filas = Array.from(tabla.querySelectorAll('tbody tr'));
+            const indiceFilaActual = filas.indexOf(filaActual);
+            
+            if (indiceFilaActual < filas.length - 1) {
+                const siguienteFila = filas[indiceFilaActual + 1];
+                
+                let selectorCampo = '.precio';
+                
+                if (elementoActual.classList.contains('select-producto')) {
+                    selectorCampo = '.select-producto';
+                } else if (elementoActual.classList.contains('comision')) {
+                    selectorCampo = '.comision';
+                } else if (elementoActual.classList.contains('form-select') && 
+                          !elementoActual.classList.contains('select-producto')) {
+                    selectorCampo = '.form-select:not(.select-producto)';
+                } else if (elementoActual.classList.contains('total_producto')) {
+                    selectorCampo = '.total_producto';
+                }
+                
+                const siguienteCampo = siguienteFila.querySelector(selectorCampo);
+                if (siguienteCampo) {
+                    siguienteCampo.focus();
+                } else {
+                    const precioSiguiente = siguienteFila.querySelector('.precio');
+                    if (precioSiguiente) precioSiguiente.focus();
+                }
+            }
+        }
+    });
+
+    // Manejar Shift+Tab para moverse hacia arriba
+    tabla.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab' && e.shiftKey) {
+            e.preventDefault();
+            
+            const elementoActual = document.activeElement;
+            const filaActual = elementoActual.closest('tr');
+            const filas = Array.from(tabla.querySelectorAll('tbody tr'));
+            const indiceFilaActual = filas.indexOf(filaActual);
+            
+            if (indiceFilaActual > 0) {
+                const filaAnterior = filas[indiceFilaActual - 1];
+                
+                let selectorCampo = '.precio';
+                
+                if (elementoActual.classList.contains('select-producto')) {
+                    selectorCampo = '.select-producto';
+                } else if (elementoActual.classList.contains('comision')) {
+                    selectorCampo = '.comision';
+                } else if (elementoActual.classList.contains('form-select') && 
+                          !elementoActual.classList.contains('select-producto')) {
+                    selectorCampo = '.form-select:not(.select-producto)';
+                } else if (elementoActual.classList.contains('total_producto')) {
+                    selectorCampo = '.total_producto';
+                }
+                
+                const campoAnterior = filaAnterior.querySelector(selectorCampo);
+                if (campoAnterior) {
+                    campoAnterior.focus();
+                } else {
+                    const precioAnterior = filaAnterior.querySelector('.precio');
+                    if (precioAnterior) precioAnterior.focus();
+                }
+            }
+        }
+    });
+});
+
+/* ============================================================
+   FUNCIÓN PARA IMPRIMIR PRODUCTOS (CON FECHA)
+============================================================ */
+function imprimirProductos() {
+    // Obtener la fecha y hora actual
+    const ahora = new Date();
+    const fecha = ahora.toLocaleDateString('es-EC', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric' 
+    });
+    const hora = ahora.toLocaleTimeString('es-EC', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+
+    // Obtener datos del cliente desde los inputs
+    const cedula = document.getElementById('txt_cedula').value || '';
+    const nombre = document.getElementById('txt_nombre').value || '';
+    const descripcion = document.getElementById('txt_descripcion').value || '';
+
+    // Seleccionamos solo filas con un producto seleccionado
+    const filas = Array.from(document.querySelectorAll("#tbody_productos tr"))
+        .filter(fila => {
+            const select = fila.querySelector(".select-producto");
+            return select && select.value !== "";
+        });
+
+    // Construimos la tabla para imprimir
+    let tabla = `<table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Comisión</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+    filas.forEach(fila => {
+        const producto = fila.querySelector(".select-producto").value;
+        const precio = parseFloat(fila.querySelector(".precio").value || 0).toFixed(2);
+        const comision = parseFloat(fila.querySelector(".comision").value || 0).toFixed(2);
+        const total = parseFloat(fila.querySelector(".total_producto").value || 0).toFixed(2);
+
+        tabla += `<tr>
+                    <td>${producto}</td>
+                    <td>$${precio}</td>
+                    <td>$${comision}</td>
+                    <td>$${total}</td>
+                  </tr>`;
+    });
+
+    tabla += `</tbody></table>`;
+
+    const subtotal = parseFloat(document.getElementById("subtotal_compra").textContent || 0).toFixed(2);
+    const comisiones = parseFloat(document.getElementById("total_comisiones").textContent || 0).toFixed(2);
+    const iva = parseFloat(document.getElementById("total_iva").textContent || 0).toFixed(2);
+    const total = parseFloat(document.getElementById("total_compra").textContent || 0).toFixed(2);
+
+    const ventana = window.open("", "PRINT", "height=700,width=900");
+    ventana.document.write(`
+        <html>
+        <head>
+            <title>Productos Seleccionados - Venta #{{ venta.id }}</title>
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                body {
+                    font-family: 'Arial', sans-serif;
+                    padding: 20px;
+                    background: #fff;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    border-bottom: 2px solid #333;
+                    padding-bottom: 15px;
+                }
+                .header h2 {
+                    color: #333;
+                    font-size: 24px;
+                    margin-bottom: 10px;
+                }
+                .header h3 {
+                    color: #666;
+                    font-size: 18px;
+                    margin-bottom: 10px;
+                }
+                .info-cliente {
+                    margin-bottom: 20px;
+                    background: #f8f9fa;
+                    padding: 15px;
+                    border-radius: 5px;
+                }
+                .info-cliente p {
+                    margin: 5px 0;
+                    font-size: 14px;
+                }
+                .info-fecha {
+                    text-align: right;
+                    margin-bottom: 10px;
+                    color: #666;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                    margin-bottom: 30px;
+                }
+                th {
+                    background-color: #343a40;
+                    color: white;
+                    font-weight: bold;
+                    padding: 12px 8px;
+                    text-align: center;
+                    border: 1px solid #ddd;
+                }
+                td {
+                    padding: 10px 8px;
+                    text-align: center;
+                    border: 1px solid #ddd;
+                }
+                tr:nth-child(even) {
+                    background-color: #f8f9fa;
+                }
+                .totales {
+                    margin-top: 20px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-align: right;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 5px;
+                }
+                .totales p {
+                    margin: 8px 0;
+                }
+                .totales strong {
+                    color: #007bff;
+                }
+                .total-final {
+                    font-size: 20px;
+                    color: #28a745;
+                    border-top: 2px solid #333;
+                    padding-top: 10px;
+                }
+                @media print {
+                    body {
+                        padding: 10px;
+                    }
+                    .no-print {
+                        display: none;
+                    }
+                    table {
+                        page-break-inside: avoid;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>Productos Seleccionados</h2>
+                <h3>Venta #{{ venta.id }} - Modo Edición</h3>
+                <div class="info-fecha">
+                    <strong>Fecha de impresión:</strong> ${fecha} <br>
+                    <strong>Hora:</strong> ${hora}<br>
+                    <strong>Fecha original:</strong> {{ venta.fecha|date:"d/m/Y H:i" }}
+                </div>
+            </div>
+            
+            <div class="info-cliente">
+                <p><strong>Cliente:</strong> ${nombre}</p>
+                <p><strong>Cédula:</strong> ${cedula}</p>
+                <p><strong>Descripción:</strong> ${descripcion || 'Sin descripción'}</p>
+            </div>
+            
+            ${tabla}
+            
+            <div class="totales">
+                <p>Subtotal: $${subtotal}</p>
+                <p>Comisiones: $${comisiones}</p>
+                <p>IVA: $${iva}</p>
+                <p class="total-final">Total: $${total}</p>
+            </div>
+            
+            <script>
+                window.print();
+                window.onafterprint = function() { 
+                    setTimeout(() => {
+                        window.close();
+                    }, 500);
+                }
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        window.close();
+                    }
+                });
+            <\/script>
+        </body>
+        </html>
+    `);
+    ventana.document.close();
+}
+
+</script>
+

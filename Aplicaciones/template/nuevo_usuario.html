@@ -1,0 +1,52 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+
+        <div class="form-container shadow p-4">
+            <form action="{% url 'nuevo_usuario' %}" id="frm_nuevo_usuario" method="post">
+                <h3 class="text-center">Agregar Nuevo Usuario:</h3>
+                {% csrf_token %}
+
+                <label for="txt_nombre"><b>Nombre:</b></label>
+                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" required>
+                <br>
+
+                <label for="txt_apellido"><b>Apellido:</b></label>
+                <input type="text" class="form-control" name="txt_apellido" id="txt_apellido" required>
+                <br>
+
+                <label for="txt_cedula"><b>Cédula:</b></label>
+                <input type="text" class="form-control" name="txt_cedula" id="txt_cedula" required>
+                <br>
+
+                <label for="select_rol"><b>Rol:</b></label>
+                <select class="form-control" name="select_rol" id="select_rol" required>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Usuario" selected>Usuario</option>
+                </select>
+                <br>
+
+                <label for="select_sucursal"><b>Sucursal:</b></label>
+                <select class="form-control" name="select_sucursal" id="select_sucursal">
+                    <option value="">-- Seleccione Sucursal --</option>
+                    {% for sucursal in sucursales %}
+                        <option value="{{ sucursal.id }}">{{ sucursal.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+
+                <center>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="{% url 'listado_usuarios' %}" class="btn btn-danger">Cancelar</a>
+                </center>
+            </form>
+        </div>
+
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+{% endblock %}

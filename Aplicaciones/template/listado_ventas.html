@@ -1,0 +1,177 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block title %}Listado de Ventas{% endblock %}
+{% block page_title %}Lista de Ventas{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Ventas</li>
+{% endblock %}
+
+{% block contenido %}
+<div class="d-flex justify-content-between mb-3">
+    <a href="{% url 'nueva_venta' %}" class="btn btn-primary">
+        <i class="fa fa-plus me-1"></i> Nueva Venta
+    </a>
+    <form method="GET" class="d-flex" style="max-width: 350px;">
+        <input type="text" name="q" value="{{ query }}" class="form-control me-2" placeholder="Buscar por nombre, cédula o descripción...">
+        <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+    </form>
+</div>
+
+<div class="card shadow">
+    <div class="card-body table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th class="text-end">Subtotal</th>
+                    <th class="text-end">Comisiones</th>
+                    <th class="text-end">IVA</th>
+                    <th class="text-end">Total</th>
+                    <th>Métodos de Pago</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas %}
+                {% with venta=v.venta %}
+                <tr>
+                    <td class="text-center">{{ venta.id }}</td>
+                    <td class="text-center">
+                        {% if venta.fecha %}  <!-- CAMBIADO: de fecha_creacion a fecha -->
+                            {{ venta.fecha|date:"d/m/Y" }}<br>
+                            <small class="text-muted">{{ venta.fecha|date:"H:i" }}</small>  <!-- CAMBIADO: de fecha_creacion a fecha -->
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ venta.cedula|default:"-" }}</td>
+                    <td>{{ venta.nombre|default:"-" }}</td>
+                    <td>{{ venta.descripcion|default:"-" }}</td>
+                    <td class="text-end">${{ v.subtotal|floatformat:2 }}</td>
+                    <td class="text-end">${{ v.comision_total|floatformat:2 }}</td>
+                    <td class="text-end">${{ v.total_iva_detalles|floatformat:2 }}</td>
+                    <td class="text-end"><strong>${{ v.total_con_comision|floatformat:2 }}</strong></td>
+
+                    <td>
+                        {% for pago in venta.pagos.all %}
+                            <div style="margin-bottom:3px;">
+                                <strong>{{ pago.metodo.descripcion }}</strong>: ${{ pago.monto_pagado|floatformat:2 }}
+                                {% if pago.banco %}- Banco: {{ pago.banco }}{% endif %}
+                                {% if pago.cuenta %}- Cuenta: {{ pago.cuenta }}{% endif %}
+                                {% if pago.comprobante %}- Comprobante: {{ pago.comprobante }}{% endif %}
+                            </div>
+                        {% empty %}
+                            - No hay métodos de pago
+                        {% endfor %}
+                    </td>
+
+                    <td class="text-center text-nowrap">
+                        <!-- VER DETALLE -->
+                        <button class="btn btn-info btn-sm ver-detalle" data-id="{{ venta.id }}">
+                            <i class="fa fa-eye"></i>
+                        </button>
+
+                        <!-- EDITAR -->
+                        <a href="{% url 'editar_venta' venta.id %}" class="btn btn-warning btn-sm">
+                            <i class="fa fa-edit"></i>
+                        </a>
+
+                        <!-- ELIMINAR -->
+                        <a href="{% url 'eliminar_venta' venta.id %}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Está seguro de eliminar esta venta?');">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endwith %}
+                {% empty %}
+                <tr>
+                    <td colspan="11" class="text-center">No hay ventas registradas</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div class="mt-3 d-flex justify-content-center">
+            <nav>
+                <ul class="pagination pagination-sm">
+                    {% if ventas.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ ventas.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">&laquo;</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                    {% endif %}
+
+                    {% for num in ventas.paginator.page_range %}
+                        {% if ventas.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if ventas.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ ventas.next_page_number }}{% if query %}&q={{ query }}{% endif %}">&raquo;</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PROFORMA -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Detalle de Venta (Proforma)</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary"></div>
+                    <p>Cargando detalles...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('.ver-detalle').click(function() {
+        let ventaId = $(this).data('id');
+        $('#detalleModal').modal('show');
+        $('#modal-body-content').html(`
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary"></div>
+                <p>Cargando detalles...</p>
+            </div>
+        `);
+
+        $.ajax({
+            url: '/ventas/detalle/' + ventaId + '/',
+            type: 'GET',
+            success: function(data) {
+                $('#modal-body-content').html(data.html);
+            },
+            error: function() {
+                $('#modal-body-content').html('<p class="text-danger text-center">No se pudo cargar el detalle.</p>');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends "plantilla.html" %}
+{% load tz %}
+
+{% block title %}Listado de Cierres de Caja Profesional{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.6.0/css/responsive.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+{% endblock %}
+
+{% block contenido %}
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h3 class="text-primary">Listado de Cierres de Caja</h3>
+            <p class="text-muted">Resumen de todos los cierres realizados</p>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="filterCaja" class="form-label">Filtrar por Caja:</label>
+                <select id="filterCaja" class="form-select">
+                    <option value="">Todas</option>
+                    {% for caja in cajas %}
+                    <option value="{{ caja.nombre }}">{{ caja.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="filterFecha" class="form-label">Filtrar por Fecha:</label>
+                <input type="date" id="filterFecha" class="form-control">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="cierresTable" class="table table-bordered table-striped table-hover text-center dt-responsive nowrap">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Caja</th>
+                        <th>Total Ventas</th>
+                        <th>Total Comisión</th>
+                        <th>Total IVA</th>
+                        <th>Total Recibido</th>
+                        <th>Total Vuelto / Reembolsos</th>
+                        <th>Fecha de Cierre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cierre in cierres %}
+                    <tr>
+                        <td>{{ cierre.id }}</td>
+                        <td>
+                            {{ cierre.caja.nombre }}
+                            <br>
+                            <small class="text-success">
+                                Total Neto: ${{ cierre.total_recibido|floatformat:2 }}
+                            </small>
+                        </td>
+                        <td class="text-end">{{ cierre.total_ventas|floatformat:2 }}</td>
+                        <td class="text-end">{{ cierre.total_comision|floatformat:2 }}</td>
+                        <td class="text-end">{{ cierre.total_iva|floatformat:2 }}</td>
+                        <td class="text-end">{{ cierre.total_recibido|floatformat:2 }}</td>
+                        <td class="text-end">{{ cierre.total_vuelto|floatformat:2 }}</td>
+                        <td>
+                            {% if cierre.created_at %}
+                                {{ cierre.created_at|localtime|date:"d/m/Y H:i" }}
+                            {% else %}
+                                <span class="text-muted">--</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No hay cierres de caja registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="table-secondary fw-bold">
+                        <td colspan="2" class="text-end">Total Neto:</td>
+                        <td colspan="5" class="text-end" id="totalNeto"></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'listado_cajas' %}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left me-1"></i> Volver
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.6.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.6.0/js/responsive.bootstrap5.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    var table = $('#cierresTable').DataTable({
+        responsive: true,
+        order: [[7, 'desc']],
+        language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'excelHtml5', text: '<i class="fa fa-file-excel"></i> Excel', className: 'btn btn-success btn-sm' },
+            { extend: 'pdfHtml5', text: '<i class="fa fa-file-pdf"></i> PDF', className: 'btn btn-danger btn-sm', orientation: 'landscape', pageSize: 'A4' },
+            { extend: 'print', text: '<i class="fa fa-print"></i> Imprimir', className: 'btn btn-primary btn-sm' }
+        ],
+        footerCallback: function ( row, data, start, end, display ) {
+            var api = this.api();
+            var parseFloatVal = function(i) {
+                return typeof i === 'string' ?
+                    parseFloat(i.replace(/[\$,]/g, '')) || 0 :
+                    typeof i === 'number' ? i : 0;
+            };
+
+            // Calcula total dinámico solo de las filas visibles (filtradas)
+            var totalNeto = api
+                .column(5, { search: 'applied' })
+                .data()
+                .reduce((a, b) => a + parseFloatVal(b), 0);
+
+            $('#totalNeto').html('$' + totalNeto.toFixed(2));
+        }
+    });
+
+    // Filtrar por caja
+    $('#filterCaja').on('change', function() { table.column(1).search(this.value).draw(); });
+
+    // Filtrar por fecha
+    $('#filterFecha').on('change', function() { table.column(7).search(this.value).draw(); });
+});
+</script>
+{% endblock %}

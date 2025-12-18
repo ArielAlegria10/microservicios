@@ -1,0 +1,63 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+<div class="container mt-4">
+    <div class="col-md-6 mx-auto">
+        <div class="form-container shadow p-4">
+            <h3 class="text-center text-primary mb-4">Editar Reembolso</h3>
+
+            <form action="{% url 'editar_reembolso' reembolso.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <label for="select_caja"><b>Caja:</b></label>
+                <select class="form-control mb-3" name="select_caja" id="select_caja" required>
+                    <option value="">-- Seleccione Caja --</option>
+                    {% for caja in cajas %}
+                        <option value="{{ caja.id }}" {% if reembolso.caja.id == caja.id %}selected{% endif %}>
+                            {{ caja.nombre }} - {{ caja.sucursal.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="select_sucursal"><b>Sucursal:</b></label>
+                <select class="form-control mb-3" name="select_sucursal" id="select_sucursal" required>
+                    <option value="">-- Seleccione Sucursal --</option>
+                    {% for sucursal in sucursales %}
+                        <option value="{{ sucursal.id }}" {% if reembolso.sucursal.id == sucursal.id %}selected{% endif %}>
+                            {{ sucursal.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="select_cierre_caja"><b>Cierre de Caja:</b></label>
+                <select class="form-control mb-3" name="select_cierre_caja" id="select_cierre_caja">
+                    <option value="">-- Seleccione Cierre de Caja --</option>
+                    {% for cierre in cierres_caja %}
+                        <option value="{{ cierre.id }}" {% if reembolso.cierre_caja and reembolso.cierre_caja.id == cierre.id %}selected{% endif %}>
+                            {{ cierre.id }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="txt_monto"><b>Monto:</b></label>
+                <input type="number" step="0.01" class="form-control mb-3" name="txt_monto" id="txt_monto" value="{{ reembolso.monto }}" required>
+
+                <label for="txt_motivo"><b>Motivo:</b></label>
+                <textarea class="form-control mb-3" name="txt_motivo" id="txt_motivo" rows="3">{{ reembolso.motivo }}</textarea>
+
+                <label for="imagen"><b>Imagen:</b></label>
+                {% if reembolso.imagen %}
+                    <div class="mb-2">
+                        <img src="{{ reembolso.imagen.url }}" width="100" alt="imagen">
+                    </div>
+                {% endif %}
+                <input type="file" class="form-control mb-3" name="imagen" id="imagen">
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <a href="{% url 'listado_reembolsos' %}" class="btn btn-danger">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

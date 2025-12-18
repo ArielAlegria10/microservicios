@@ -1,0 +1,65 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-container shadow p-4">
+                <h3 class="text-center text-primary">
+                    {% if usuario %}Editar Usuario{% else %}Registrar Usuario{% endif %}
+                </h3>
+
+                <form action="{% if usuario %}{% url 'editar_usuario' usuario.id %}{% else %}{% url 'registrar_usuario' %}{% endif %}" 
+                      method="post">
+                    {% csrf_token %}
+
+                    {% if usuario %}
+                    <label><b>ID:</b></label>
+                    <input type="text" class="form-control" name="id" value="{{ usuario.id }}" readonly>
+                    <br>
+                    {% endif %}
+
+                    <label><b>Nombre:</b></label>
+                    <input type="text" class="form-control" name="txt_nombre" value="{{ usuario.nombre|default:'' }}" required>
+                    <br>
+
+                    <label><b>Apellido:</b></label>
+                    <input type="text" class="form-control" name="txt_apellido" value="{{ usuario.apellido|default:'' }}" required>
+                    <br>
+
+                    <label><b>Cédula:</b></label>
+                    <input type="text" class="form-control" name="txt_cedula" value="{{ usuario.cedula|default:'' }}" required>
+                    <br>
+
+                    <label><b>Rol:</b></label>
+                    <select class="form-control" name="select_rol" required>
+                        <option value="Administrador" {% if usuario.rol == 'Administrador' %}selected{% endif %}>Administrador</option>
+                        <option value="Usuario" {% if usuario.rol == 'Usuario' %}selected{% endif %}>Usuario</option>
+                    </select>
+                    <br>
+
+                    <label><b>Sucursal:</b></label>
+                    <select class="form-control" name="select_sucursal">
+                        <option value="">-- Seleccione Sucursal --</option>
+                        {% for sucursal in sucursales %}
+                            <option value="{{ sucursal.id }}" {% if usuario.sucursal and usuario.sucursal.id == sucursal.id %}selected{% endif %}>
+                                {{ sucursal.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">
+                            {% if usuario %}Guardar Cambios{% else %}Registrar{% endif %}
+                        </button>
+                        <a href="{% url 'listado_usuarios' %}" class="btn btn-danger">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

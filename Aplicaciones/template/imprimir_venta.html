@@ -1,0 +1,100 @@
+{% extends "plantilla.html" %}
+
+{% block title %}Imprimir Venta #{{ venta.id }}{% endblock %}
+
+{% block contenido %}
+<div id="printable">
+    <div class="container py-2">
+        <div class="card shadow mx-auto" style="max-width: 800px;">
+            <div class="card-header text-center py-1">
+                <h4 class="mb-1">Venta #{{ venta.id }}</h4>
+                <p class="mb-1" style="font-size:0.85rem;"><strong>Fecha:</strong> {{ venta.fecha|date:"d/m/Y H:i" }}</p>
+            </div>
+            <div class="card-body p-2">
+                <!-- Información del cliente -->
+                <div class="row mb-2" style="font-size: 0.85rem;">
+                    <div class="col-6">
+                        <p class="mb-1"><strong>Cédula:</strong> {{ venta.cedula|default:"-" }}</p>
+                        <p class="mb-1"><strong>Nombre:</strong> {{ venta.nombre|default:"-" }}</p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <p class="mb-1"><strong>Forma de Pago:</strong> {% if venta.formapago %}{{ venta.formapago.descripcion }}{% else %}N/A{% endif %}</p>
+                    </div>
+                </div>
+
+                <!-- Tabla de productos (solo columnas visibles) -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm mb-1" style="font-size: 0.8rem; width:100%;">
+                        <thead class="table-light text-center" style="font-size:0.8rem;">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cant</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detalle in detalles %}
+                            <tr>
+                                <td>{{ detalle.producto|default:"-" }}</td>
+                                <td class="text-end">{{ detalle.cantidad }}</td>
+                                <td class="text-end">${{ detalle.precio|floatformat:2 }}</td>
+                                <td class="text-end">${{ detalle.subtotal|floatformat:2 }}</td>
+                                <td class="text-end">${{ detalle.total_con_comision|floatformat:2 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">No hay productos</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot style="font-size:0.85rem;">
+                            <tr>
+                                <th colspan="4" class="text-end">Subtotal (solo productos):</th>
+                                <th class="text-end">${{ subtotal_total|floatformat:2 }}</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4" class="text-end">Total:</th>
+                                <th class="text-end">${{ total_con_comision_total|floatformat:2 }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Información adicional -->
+                <div class="row mt-1" style="font-size:0.85rem;">
+                    <div class="col-6">
+                        <p class="mb-1"><strong>Recibido:</strong> ${{ venta.recibido|floatformat:2 }}</p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <p class="mb-1"><strong>Vuelto:</strong> ${{ venta.vuelto|floatformat:2 }}</p>
+                    </div>
+                </div>
+
+                <!-- Botón de imprimir -->
+                <div class="text-center mt-2">
+                    <button class="btn btn-dark btn-sm" onclick="window.print()">
+                        <i class="fa fa-print"></i> Imprimir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+@media print {
+    body * { visibility: hidden; }
+    #printable, #printable * { visibility: visible; }
+    #printable { position: relative; margin: 0 auto; width: 100%; max-width: 800px; }
+    .btn { display: none; }
+    table { width: 100%; table-layout: fixed; font-size: 0.8rem; margin:0; }
+    th, td { padding: 3px 4px !important; }
+    tr { page-break-inside: avoid; page-break-after: auto; }
+    .card, .container, .card-body { border: none; box-shadow: none; padding: 0; }
+}
+</style>
+{% endblock %}
