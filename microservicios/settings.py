@@ -5,18 +5,30 @@ Django settings for microservicios project.
 from pathlib import Path
 import os
 
+# =========================================
+# BASE
+# =========================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # =========================================
-# CONFIGURACIÓN GENERAL
+# SEGURIDAD (RENDER)
 # =========================================
-SECRET_KEY = 'django-insecure-12bpkct$-0pk$#v*1$#p*x18ih8vmqd%^a@td9kxpegdla80pr'
-DEBUG = True
-ALLOWED_HOSTS = ['*']  # Para evitar errores durante desarrollo
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-local-only"
+)
+
+DEBUG = os.getenv("DEBUG", "False") == "True"
+
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
 
 # =========================================
-# APPS INSTALADAS
+# APPS
 # =========================================
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -26,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Tu app
     'Aplicaciones',
 ]
 
@@ -55,7 +66,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'Aplicaciones', 'template')
+            BASE_DIR / 'Aplicaciones' / 'template'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -69,20 +80,21 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'microservicios.wsgi.application'
 
 
 # =========================================
-# BASE DE DATOS
+# BASE DE DATOS (RENDER / LOCAL)
 # =========================================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'microservi',
-        'USER': 'postgres',
-        'PASSWORD': 'Ariel1997',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv("DB_NAME", "microservi"),
+        'USER': os.getenv("DB_USER", "postgres"),
+        'PASSWORD': os.getenv("DB_PASSWORD", ""),
+        'HOST': os.getenv("DB_HOST", "localhost"),
+        'PORT': os.getenv("DB_PORT", "5432"),
     }
 }
 
@@ -90,11 +102,11 @@ DATABASES = {
 # =========================================
 # USUARIO PERSONALIZADO
 # =========================================
-AUTH_USER_MODEL = 'Aplicaciones.Usuario'   # ¡IMPORTANTE!
+AUTH_USER_MODEL = 'Aplicaciones.Usuario'
 
 
 # =========================================
-# VALIDADORES DE CONTRASEÑA
+# VALIDADORES
 # =========================================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -105,9 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # =========================================
-# INTERNACIONALIZACIÓN
+# IDIOMA / ZONA HORARIA
 # =========================================
-LANGUAGE_CODE = 'es-ec'  # Español Ecuador
+LANGUAGE_CODE = 'es-ec'
 TIME_ZONE = 'America/Guayaquil'
 USE_I18N = True
 USE_TZ = True
@@ -117,19 +129,22 @@ USE_TZ = True
 # ARCHIVOS ESTÁTICOS
 # =========================================
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'microservicios', 'static'),  # ✅ Ahora Django lo reconoce correctamente
+    BASE_DIR / 'microservicios' / 'static',
 ]
 
-# Carpeta donde collectstatic copiará los archivos
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # =========================================
-# ARCHIVOS SUBIDOS
+# MEDIA
 # =========================================
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
+# =========================================
+# DEFAULT
+# =========================================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
