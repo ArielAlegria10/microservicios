@@ -1,5 +1,6 @@
 from email import parser
 from reportlab.lib.styles import getSampleStyleSheet
+from rest_framework import serializers
 from django.template.loader import render_to_string
 from reportlab.platypus import Table, TableStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
@@ -1246,3 +1247,8 @@ def imprimir_cierre_caja(request, caja_id):
     doc.build(elements)
     
     return response
+
+class VentaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Venta
+        fields = '__all__'

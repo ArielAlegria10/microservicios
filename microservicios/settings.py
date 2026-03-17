@@ -4,6 +4,7 @@ Django settings for microservicios project.
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # =========================================
 # BASE
@@ -12,19 +13,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # =========================================
-# SEGURIDAD (RENDER)
+# SEGURIDAD
 # =========================================
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-local-only"
 )
 
-DEBUG = os.getenv("DEBUG", "False") == "True"
+# ⚠️ PARA DESARROLLO (evita 500 silencioso)
+DEBUG = True
 
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1"
-).split(",")
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    ".onrender.com",
+    "sistemacomtablearicode.com",
+    "www.sistemacomtablearicode.com",
+]
 
 
 # =========================================
@@ -37,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
 
     'Aplicaciones',
 ]
@@ -53,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 
@@ -60,7 +71,7 @@ ROOT_URLCONF = 'microservicios.urls'
 
 
 # =========================================
-# TEMPLATES
+# TEMPLATES (🔥 AQUÍ ESTABA EL PROBLEMA)
 # =========================================
 TEMPLATES = [
     {
@@ -68,7 +79,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / 'Aplicaciones' / 'template'
         ],
-        'APP_DIRS': True,
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -85,16 +96,16 @@ WSGI_APPLICATION = 'microservicios.wsgi.application'
 
 
 # =========================================
-# BASE DE DATOS (RENDER / LOCAL)
+# BASE DE DATOS
 # =========================================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DB_NAME", "microservi"),
-        'USER': os.getenv("DB_USER", "postgres"),
-        'PASSWORD': os.getenv("DB_PASSWORD", ""),
-        'HOST': os.getenv("DB_HOST", "localhost"),
-        'PORT': os.getenv("DB_PORT", "5432"),
+        'NAME': 'microservi',
+        'USER': 'postgres',
+        'PASSWORD': 'Ariel1997',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -119,7 +130,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # =========================================
 # IDIOMA / ZONA HORARIA
 # =========================================
-LANGUAGE_CODE = 'es-ec'
+# ⚠️ es-ec NO existe en Django
+LANGUAGE_CODE = 'es'
 TIME_ZONE = 'America/Guayaquil'
 USE_I18N = True
 USE_TZ = True
@@ -131,7 +143,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'microservicios' / 'static',
+    BASE_DIR / 'static',
 ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -145,6 +157,32 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # =========================================
-# DEFAULT
+# REST FRAMEWORK / JWT
 # =========================================
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://sistemacomtablearicode.com",
+    "https://www.sistemacomtablearicode.com",
+]
